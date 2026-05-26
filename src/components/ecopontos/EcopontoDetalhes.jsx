@@ -13,8 +13,10 @@ export default function EcopontoDetalhes({
   onEdit,
   onNovaVistoria,
   onExcluir,
+  onExcluirVistoria,
 }) {
   const [confirmDelete, setConfirmDelete] = useState(false)
+  const [confirmDeleteVistoria, setConfirmDeleteVistoria] = useState(null)
   const canManage = canManageEcopontos(perfil)
   const canDelete = canDeleteEcopontos(perfil)
   const historico = [...vistorias].sort((a, b) => new Date(b.dataVisita) - new Date(a.dataVisita))
@@ -69,6 +71,34 @@ export default function EcopontoDetalhes({
                   <div className="flex items-center gap-2">
                     <BadgeConformidade value={v.conformidade} />
                     <button type="button" onClick={() => exportarLaudoPDF(v, ecoponto)} className="text-xs text-primary hover:underline">PDF</button>
+                    {canManage && (
+                      confirmDeleteVistoria === v.id ? (
+                        <>
+                          <button
+                            type="button"
+                            onClick={() => onExcluirVistoria(v.id)}
+                            className="text-xs text-red-600 hover:underline font-medium"
+                          >
+                            Confirmar
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setConfirmDeleteVistoria(null)}
+                            className="text-xs text-gray-500 hover:underline"
+                          >
+                            Cancelar
+                          </button>
+                        </>
+                      ) : (
+                        <button
+                          type="button"
+                          onClick={() => setConfirmDeleteVistoria(v.id)}
+                          className="text-xs text-red-600 hover:underline"
+                        >
+                          Deletar
+                        </button>
+                      )
+                    )}
                   </div>
                 </li>
               ))}

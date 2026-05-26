@@ -9,7 +9,8 @@ import EcopontoLista from '../components/ecopontos/EcopontoLista'
 import EcopontoForm from '../components/ecopontos/EcopontoForm'
 import EcopontoDetalhes from '../components/ecopontos/EcopontoDetalhes'
 import EcopontoEstatisticas from '../components/ecopontos/EcopontoEstatisticas'
-import VistoriaChecklist, { createEmptyVistoria } from '../components/ecopontos/VistoriaChecklist'
+import VistoriaEcopontoChecklist, { createEmptyVistoriaEcoponto } from '../components/ecopontos/VistoriaEcopontoChecklist'
+import VistoriaPEVChecklist, { createEmptyVistoriaPEV } from '../components/ecopontos/VistoriaPEVChecklist'
 
 const TABS = [
   { id: 'cadastros', label: 'Cadastros' },
@@ -27,7 +28,7 @@ export default function Ecopontos() {
   const [selectedId, setSelectedId] = useState(null)
   const [showEcoForm, setShowEcoForm] = useState(false)
   const [editEco, setEditEco] = useState(null)
-  const [visForm, setVisForm] = useState(() => createEmptyVistoria())
+  const [visForm, setVisForm] = useState(null)
   const [lastSavedVistoria, setLastSavedVistoria] = useState(null)
   const [successMsg, setSuccessMsg] = useState('')
   const [savingVis, setSavingVis] = useState(false)
@@ -108,14 +109,27 @@ export default function Ecopontos() {
     showSuccess('Ecoponto excluído.')
   }
 
+  const handleExcluirVistoria = async (vistoriaId) => {
+    await remove(COLLECTIONS.VISTORIAS, vistoriaId)
+    showSuccess('Vistoria deletada com sucesso.')
+  }
+
   const openNovaVistoria = (ecopontoId) => {
     const eco = ecopontos.find((e) => e.id === ecopontoId)
-    const v = createEmptyVistoria(user?.email || '', ecopontoId)
+    let v
+    
+    // Criar formulário baseado no tipo de ecoponto
+    if (eco?.tipo === 'Ecoponto') {
+      v = createEmptyVistoriaEcoponto(user?.email || '', ecopontoId)
+    } else if (eco?.tipo === 'PEV') {
+      v = createEmptyVistoriaPEV(user?.email || '', ecopontoId)
+    } else {
+      // Para Cooperativa, usar o Ecoponto como padrão
+      v = createEmptyVistoriaEcoponto(user?.email || '', ecopontoId)
+    }
+    
     if (eco) {
       v.contato = eco.contato || ''
-      v.inaugurado = eco.inaugurado === true
-      v.epi = eco.epi === true
-      v.horarioFuncionamento = eco.horario || ''
       v.ecopontoNome = eco.nome
     }
     setVisForm(v)
@@ -138,6 +152,7 @@ export default function Ecopontos() {
           onEdit={() => { setEditEco(selectedEco); setShowEcoForm(true) }}
           onNovaVistoria={() => openNovaVistoria(selectedEco.id)}
           onExcluir={handleExcluirEco}
+          onExcluirVistoria={handleExcluirVistoria}
         />
       </div>
     )
@@ -168,7 +183,7 @@ export default function Ecopontos() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-gray-800">Ecopontos / PEVs / Cooperativas</h1>
+        <h1 className="text-2xl font-bold text-gray-800">Pontos de Entrega</h1>
         <p className="text-gray-500 text-sm">Cadastro e vistorias de unidades de recebimento de resíduos</p>
       </div>
 
@@ -212,16 +227,56 @@ export default function Ecopontos() {
       )}
 
       {tab === 'vistoria' && canManage && (
-        <VistoriaChecklist
-          form={visForm}
-          setForm={setVisForm}
-          ecopontos={ecopontos}
-          disabled={false}
-          onSave={handleSaveVistoria}
-          saving={savingVis}
-          savedVistoria={lastSavedVistoria}
-          ecopontoForPdf={ecopontos.find((e) => e.id === (lastSavedVistoria?.ecopontoId || visForm.ecopontoId))}
-        />
+        visForm ? (
+          visForm.tipo === 'pev' ? (
+            <VistoriaPEVChecklist
+              form={visForm}
+              setForm={setVisForm}
+              ecopontos={ecopontos}
+              disabled={false}
+              onSave={handleSaveVistoria}
+              saving={savingVis}
+              savedVistoria={lastSavedVistoria}
+              ecopontoForPdf={ecopontos.find((e) => e.id === (lastSavedVistoria?.ecopontoId || visForm.ecopontoId))}
+            />
+          ) : (
+            <VistoriaEcopontoChecklist
+              form={visForm}
+              setForm={setVisForm}
+              ecopontos={ecopontos}
+              disabled={false}
+              onSave={handleSaveVistoria}
+              saving={savingVis}
+              savedVistoria={lastSavedVistoria}
+              ecopontoForPdf={ecopontos.find((e) => e.id === (lastSavedVistoria?.ecopontoId || visForm.ecopontoId))}
+            />
+          )
+        ) : (
+          <div className="bg-white rounded-xl border p-6 shadow-sm max-w-2xl">
+            <h2 className="text-lg font-bold text-gray-800 mb-4">Iniciar Nova Vistoria</h2>
+            <p className="text-gray-600 text-sm mb-6">Selecione um ponto de entrega para começar a vistoria</p>
+            <div className="space-y-4">
+              <div>
+                <label className="text-sm font-medium text-gray-700 mb-2 block">Selecione o Ponto de Entrega *</label>
+                <select
+                  onChange={(e) => {
+                    if (e.target.value) {
+                      openNovaVistoria(e.target.value)
+                    }
+                  }}
+                  className="w-full border rounded-lg px-3 py-2 text-sm"
+                >
+                  <option value="">-- Selecione um ponto --</option>
+                  {ecopontos.filter((e) => e.ativo !== false).map((e) => (
+                    <option key={e.id} value={e.id}>
+                      {e.nome} ({e.tipo})
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+          </div>
+        )
       )}
 
       {tab === 'estatisticas' && (

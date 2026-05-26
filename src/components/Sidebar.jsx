@@ -12,7 +12,7 @@ const links = [
   { to: '/pontos-viciados', label: 'Pontos Viciados', icon: '📍', alertKey: 'pontos' },
   { to: '/cacambas', label: 'Caçambas', icon: '🚧', alertKey: 'cacambas' },
   { to: '/varricao', label: 'Varrição', icon: '🧹', planBadges: true },
-  { to: '/ecopontos', label: 'Ecopontos / PEVs', icon: '♻️' },
+  { to: '/ecopontos', label: 'Pontos de Entrega', icon: '♻️' },
   { to: '/protocolos-156', label: 'Protocolos 156', icon: '📋' },
 ]
 

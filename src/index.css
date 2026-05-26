@@ -1,11 +1,14 @@
 @import "tailwindcss";
 
-@theme {
+:root {
   --color-primary: #1D9E75;
   --color-primary-dark: #157a5c;
   --color-primary-light: #e8f7f1;
 }
 
 body {
-  @apply bg-gray-50 text-gray-900 antialiased;
+  background-color: #f8fafc;
+  color: #111827;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
