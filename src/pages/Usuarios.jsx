@@ -21,7 +21,9 @@ export default function Usuarios() {
     setLoading(false)
   }
 
-  useEffect(() => { load() }, [])
+  useEffect(() => {
+    (async () => { await load() })()
+  }, [])
 
   const handleCreate = async () => {
     setError('')
@@ -47,7 +49,7 @@ export default function Usuarios() {
           <h1 className="text-2xl font-bold text-gray-800">Usuários</h1>
           <p className="text-gray-500 text-sm">Gerenciamento de acesso — apenas Gestor</p>
         </div>
-        <button type="button" onClick={() => setModal(true)} className="px-4 py-2 bg-primary text-white rounded-lg text-sm font-medium">
+        <button type="button" onClick={() => setModal(true)} className="bg-green-600 hover:bg-green-700 text-white font-medium px-4 py-2 rounded-lg text-sm transition-colors">
           + Novo Usuário
         </button>
       </div>
@@ -85,7 +87,7 @@ export default function Usuarios() {
             {Object.values(PERFIS).map((p) => <option key={p} value={p}>{p}</option>)}
           </select>
         </div>
-        <button type="button" onClick={handleCreate} disabled={saving} className="mt-4 w-full py-2 bg-primary text-white rounded-lg font-medium disabled:opacity-60">
+        <button type="button" onClick={handleCreate} disabled={saving} className="mt-4 w-full bg-green-600 hover:bg-green-700 text-white font-medium px-4 py-2 rounded-lg text-sm transition-colors disabled:opacity-60">
           {saving ? 'Criando...' : 'Criar Usuário'}
         </button>
       </Modal>

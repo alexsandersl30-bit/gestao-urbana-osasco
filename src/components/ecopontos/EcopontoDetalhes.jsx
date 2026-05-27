@@ -23,13 +23,13 @@ export default function EcopontoDetalhes({
 
   return (
     <div className="space-y-6">
-      <button type="button" onClick={onBack} className="text-sm text-primary hover:underline">← Voltar</button>
+      <button type="button" onClick={onBack} className="text-sm text-green-600 hover:underline">← Voltar</button>
 
       <div className="bg-white rounded-xl border p-6 shadow-sm">
         <div className="flex flex-wrap justify-between gap-4 mb-6">
           <div>
             <h2 className="text-xl font-bold text-gray-800">{ecoponto.nome}</h2>
-            <span className="text-xs bg-primary-light text-primary px-2 py-0.5 rounded">{ecoponto.tipo}</span>
+            <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded">{ecoponto.tipo}</span>
             <p className="text-gray-500 text-sm mt-2">{ecoponto.endereco}, {ecoponto.bairro}</p>
           </div>
         </div>
@@ -70,7 +70,7 @@ export default function EcopontoDetalhes({
                   </div>
                   <div className="flex items-center gap-2">
                     <BadgeConformidade value={v.conformidade} />
-                    <button type="button" onClick={() => exportarLaudoPDF(v, ecoponto)} className="text-xs text-primary hover:underline">PDF</button>
+                    <button type="button" onClick={() => exportarLaudoPDF(v, ecoponto)} className="text-xs bg-green-600 hover:bg-green-700 text-white px-2 py-0.5 rounded transition-colors">PDF</button>
                     {canManage && (
                       confirmDeleteVistoria === v.id ? (
                         <>
@@ -108,19 +108,19 @@ export default function EcopontoDetalhes({
 
         {canManage && (
           <div className="mt-6 flex flex-wrap gap-2 pt-4 border-t">
-            <button type="button" onClick={onNovaVistoria} className="px-4 py-2 bg-primary text-white rounded-lg text-sm font-medium hover:bg-primary-dark">
+            <button type="button" onClick={onNovaVistoria} className="bg-green-600 hover:bg-green-700 text-white font-medium px-4 py-2 rounded-lg text-sm transition-colors">
               Nova vistoria
             </button>
-            <button type="button" onClick={onEdit} className="px-4 py-2 border rounded-lg text-sm font-medium hover:bg-gray-50">Editar</button>
+            <button type="button" onClick={onEdit} className="bg-white hover:bg-gray-50 text-gray-700 font-medium px-4 py-2 rounded-lg text-sm border border-gray-200 transition-colors">Editar</button>
             {canDelete && (
               confirmDelete ? (
                 <div className="flex items-center gap-2">
                   <span className="text-sm text-red-600">Confirmar exclusão do ecoponto e vistorias?</span>
-                  <button type="button" onClick={onExcluir} className="px-3 py-1.5 bg-red-600 text-white rounded text-sm">Sim</button>
-                  <button type="button" onClick={() => setConfirmDelete(false)} className="px-3 py-1.5 border rounded text-sm">Não</button>
+                  <button type="button" onClick={onExcluir} className="bg-red-50 hover:bg-red-100 text-red-700 font-medium px-3 py-1.5 rounded-lg text-sm border border-red-200 transition-colors">Sim</button>
+                  <button type="button" onClick={() => setConfirmDelete(false)} className="bg-white hover:bg-gray-50 text-gray-700 font-medium px-3 py-1.5 rounded-lg text-sm border border-gray-200 transition-colors">Não</button>
                 </div>
               ) : (
-                <button type="button" onClick={() => setConfirmDelete(true)} className="px-4 py-2 text-red-600 border border-red-200 rounded-lg text-sm hover:bg-red-50">Excluir</button>
+                <button type="button" onClick={() => setConfirmDelete(true)} className="bg-red-50 hover:bg-red-100 text-red-700 font-medium px-4 py-2 rounded-lg text-sm border border-red-200 transition-colors">Excluir</button>
               )
             )}
           </div>

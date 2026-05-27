@@ -1,5 +1,4 @@
 import { daysSince } from './dates'
-import { isCurrentMonth } from './pontosViciados'
 
 export const FREQUENCIAS = ['Diária', '3x/semana', '2x/semana', 'Semanal', 'Quinzenal']
 export const PLANOS = ['Verde', 'Azul', 'Laranja']
@@ -14,15 +13,15 @@ const FREQ_DAYS = {
 }
 
 export const PLANO_STYLES = {
-  Verde: { badge: 'bg-green-100 text-green-800 border-green-300', hex: '#22c55e' },
-  Azul: { badge: 'bg-blue-100 text-blue-800 border-blue-300', hex: '#3b82f6' },
-  Laranja: { badge: 'bg-orange-100 text-orange-800 border-orange-300', hex: '#f97316' },
+  Verde: { badge: 'bg-[#DCFCE7] text-[#15803D] border-[#bbf7d0]', hex: '#22c55e' },
+  Azul: { badge: 'bg-[#DBEAFE] text-[#1E40AF] border-[#bfdbfe]', hex: '#3b82f6' },
+  Laranja: { badge: 'bg-[#FEF9C3] text-[#854D0E] border-[#fef3c7]', hex: '#f97316' },
 }
 
 export const STATUS_BADGE = {
-  'Em dia': 'bg-green-100 text-green-800 border-green-200',
-  Atenção: 'bg-yellow-100 text-yellow-800 border-yellow-200',
-  Atrasada: 'bg-red-100 text-red-800 border-red-200',
+  'Em dia': 'bg-[#DCFCE7] text-[#15803D] border-[#bbf7d0]',
+  Atenção: 'bg-[#FEF9C3] text-[#854D0E] border-[#fef3c7]',
+  Atrasada: 'bg-[#FEE2E2] text-[#991B1B] border-[#fecaca]',
 }
 
 /** Retorna km numérico seguro (0 quando null/undefined/NaN). */

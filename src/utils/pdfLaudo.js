@@ -5,7 +5,7 @@ import {
   ESTRUTURA_LABELS,
   RESIDUOS_LABELS,
   COMUNICACAO_LABELS,
-} from '../components/ChecklistField'
+} from '../components/checklistLabels'
 
 export function exportarLaudoPDF(vistoria, ecoponto) {
   const doc = new jsPDF()

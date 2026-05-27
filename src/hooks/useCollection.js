@@ -1,14 +1,12 @@
 import { useEffect, useState } from 'react'
 import { subscribe } from '../firebase/db'
-import { filtrarDocumentosValidos } from '../utils/firestoreValidate'
 
 export function useCollection(collectionName) {
   const [data, setData] = useState([])
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(!!collectionName)
 
   useEffect(() => {
     if (!collectionName) return
-    setLoading(true)
     const unsub = subscribe(collectionName, (items) => {
       setData(items)
       setLoading(false)

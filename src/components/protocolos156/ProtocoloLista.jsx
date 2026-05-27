@@ -56,12 +56,12 @@ export default function ProtocoloLista({
           </select>
         </div>
         {canImport && (
-          <button type="button" onClick={onImportar} className="px-4 py-2 border border-primary text-primary rounded-lg text-sm font-medium hover:bg-primary-light whitespace-nowrap">
+          <button type="button" onClick={onImportar} className="bg-white hover:bg-gray-50 text-gray-700 font-medium px-4 py-2 rounded-lg text-sm border border-gray-200 transition-colors whitespace-nowrap">
             Importar Excel
           </button>
         )}
         {canCreate && (
-          <button type="button" onClick={onNovo} className="px-4 py-2 bg-primary text-white rounded-lg text-sm font-medium whitespace-nowrap">
+          <button type="button" onClick={onNovo} className="bg-green-600 hover:bg-green-700 text-white font-medium px-4 py-2 rounded-lg text-sm transition-colors whitespace-nowrap">
             + Novo protocolo
           </button>
         )}
@@ -99,7 +99,7 @@ export default function ProtocoloLista({
                     <td className="p-3 text-center">{diasEmAberto(p)}</td>
                     <td className="p-3"><BadgeStatus status={status} /></td>
                     <td className="p-3">
-                      <button type="button" onClick={() => onDetalhes(p.id)} className="text-primary text-sm font-medium hover:underline">
+                      <button type="button" onClick={() => onDetalhes(p.id)} className="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded-lg text-xs transition-colors">
                         Ver detalhes
                       </button>
                     </td>

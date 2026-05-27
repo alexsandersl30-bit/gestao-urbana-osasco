@@ -3,15 +3,10 @@ import { subscribeHistoricoVarricao } from '../firebase/db'
 
 export function useHistoricoVarricao(varricaoId) {
   const [historico, setHistorico] = useState([])
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(!!varricaoId)
 
   useEffect(() => {
-    if (!varricaoId) {
-      setHistorico([])
-      setLoading(false)
-      return undefined
-    }
-    setLoading(true)
+    if (!varricaoId) return undefined
     const unsub = subscribeHistoricoVarricao(varricaoId, (items) => {
       setHistorico(items)
       setLoading(false)

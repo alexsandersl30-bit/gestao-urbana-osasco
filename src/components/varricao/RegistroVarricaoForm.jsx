@@ -68,7 +68,7 @@ export default function RegistroVarricaoForm({ open, onClose, onSave, rua, respo
           <label className="block text-sm font-medium text-gray-700 mb-2">Fotos (antes/depois, máx. 5)</label>
           <PhotoUpload fotos={form.fotos} onChange={(fotos) => setForm({ ...form, fotos })} maxPhotos={5} />
         </div>
-        <button type="submit" disabled={saving} className="w-full py-2.5 bg-primary text-white rounded-lg font-medium disabled:opacity-60">
+        <button type="submit" disabled={saving} className="w-full bg-green-600 hover:bg-green-700 text-white font-medium px-4 py-2.5 rounded-lg transition-colors disabled:opacity-60">
           {saving ? 'Salvando...' : 'Salvar varrição'}
         </button>
       </form>

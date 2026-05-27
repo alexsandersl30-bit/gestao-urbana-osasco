@@ -1,91 +1,19 @@
 import { useMemo } from 'react'
 import PhotoUpload from '../PhotoUpload'
 import { ItemCheck } from '../ChecklistField'
-import { calcularConformidade } from '../../utils/ecopontos'
 import { exportarLaudoPDF } from '../../utils/pdfLaudo'
+import {
+  ECOPONTO_OPERACAO_LABELS,
+  ECOPONTO_INFRAESTRUTURA_LABELS,
+  ECOPONTO_SEGREGACAO_LABELS,
+  ECOPONTO_CONDICIONAMENTO_LABELS,
+  ECOPONTO_COLETA_LABELS,
+  ECOPONTO_IRREGULARIDADES_LABELS,
+  ECOPONTO_SEGURANCA_LABELS,
+  ECOPONTO_FUNCIONAMENTO_LABELS,
+} from './checklistLabels'
 
-// Labels específicos para Ecoponto
-export const ECOPONTO_OPERACAO_LABELS = {
-  atendimento: 'Atendimento',
-  registroAnotacao: 'Realiza registro (anotação/sistema)',
-}
-
-export const ECOPONTO_INFRAESTRUTURA_LABELS = {
-  cercamento: 'Cercamento/controle de acesso',
-  identificacaoResiduos: 'Identificação dos tipos de resíduos',
-  rampa: 'Rampa/Acesso',
-  iluminacao: 'Iluminação',
-  pavimentacao: 'Pavimentação',
-}
-
-export const ECOPONTO_SEGREGACAO_LABELS = {
-  separacaoTipo: 'Separação por tipo',
-  seMisturados: 'Se misturados - sinalizar',
-  rcc: 'RCC (entulho)',
-  volumosos: 'Volumosos (móveis/colchões)',
-  eletroeletronicos: 'Eletroeletrônicos',
-}
-
-export const ECOPONTO_CONDICIONAMENTO_LABELS = {
-  container: 'Container',
-  suportes: 'Suportes',
-  camarasAdequadas: 'Câmaras adequadas',
-  nivelOcupacao: 'Nível de ocupação',
-  residuosFora: 'Resíduos fora das áreas',
-}
-
-export const ECOPONTO_COLETA_LABELS = {
-  frequencia: 'Frequência de retirada',
-}
-
-export const ECOPONTO_IRREGULARIDADES_LABELS = {
-  residuosProibidos: 'Presença de resíduos proibidos',
-  mauCheiro: 'Mau cheiro',
-  presencaVetores: 'Presença de vetores',
-}
-
-export const ECOPONTO_SEGURANCA_LABELS = {
-  riscoUsuarios: 'Risco aos usuários',
-  riscoTrabalhadores: 'Risco aos trabalhadores',
-  usoEPI: 'Uso de EPIs pela equipe',
-  impactoAmbiental: 'Impacto ambiental',
-}
-
-export const ECOPONTO_FUNCIONAMENTO_LABELS = {
-  equipamento: 'Equipamento atende ao objetivo',
-  necessidadeAjuste: 'Necessidade de ajuste operacional',
-}
-
-function initSection(labels) {
-  return Object.keys(labels).reduce((acc, k) => {
-    acc[k] = { condicao: '', obs: '' }
-    return acc
-  }, {})
-}
-
-export function createEmptyVistoriaEcoponto(fiscal = '', ecopontoId = '') {
-  return {
-    ecopontoId,
-    ecopontoNome: '',
-    tipo: 'ecoponto',
-    fiscal,
-    dataVisita: new Date().toISOString().slice(0, 10),
-    horario: '',
-    contato: '',
-    obs: '',
-    operacao: initSection(ECOPONTO_OPERACAO_LABELS),
-    infraestrutura: initSection(ECOPONTO_INFRAESTRUTURA_LABELS),
-    segregacao: initSection(ECOPONTO_SEGREGACAO_LABELS),
-    condicionamento: initSection(ECOPONTO_CONDICIONAMENTO_LABELS),
-    coleta: initSection(ECOPONTO_COLETA_LABELS),
-    irregularidades: initSection(ECOPONTO_IRREGULARIDADES_LABELS),
-    seguranca: initSection(ECOPONTO_SEGURANCA_LABELS),
-    funcionamento: initSection(ECOPONTO_FUNCIONAMENTO_LABELS),
-    classificacaoFinal: '',
-    fotos: [],
-    conformidade: 0,
-  }
-}
+// labels and factory functions moved to ./checklistLabels
 
 export default function VistoriaEcopontoChecklist({
   form,
@@ -140,7 +68,7 @@ export default function VistoriaEcopontoChecklist({
 
   return (
     <div className="bg-white rounded-xl border shadow-sm overflow-hidden">
-      <div className="bg-primary/10 border-b px-6 py-4">
+      <div className="bg-green-100 border-b px-6 py-4">
         <h2 className="text-lg font-bold text-gray-800">Checklist de Vistoria - Ecoponto</h2>
         <p className="text-sm text-gray-500">Prefeitura de Osasco — Pontos de Entrega</p>
       </div>
@@ -370,9 +298,9 @@ export default function VistoriaEcopontoChecklist({
             <PhotoUpload fotos={form.fotos} onChange={(fotos) => setForm({ ...form, fotos })} disabled={disabled} maxPhotos={5} />
           </div>
 
-          <div className="rounded-xl bg-primary-light/40 border border-primary/20 p-4 text-center">
+          <div className="rounded-xl bg-green-100 border border-green-200 p-4 text-center">
             <p className="text-sm text-gray-600">Percentual de conformidade</p>
-            <p className="text-4xl font-bold text-primary mt-1">{conformidade}%</p>
+            <p className="text-4xl font-bold text-green-600 mt-1">{conformidade}%</p>
             <p className="text-xs text-gray-500 mt-1">Baseado em itens &quot;Bom&quot; e &quot;Adequado&quot;</p>
           </div>
 
@@ -382,7 +310,7 @@ export default function VistoriaEcopontoChecklist({
                 type="button"
                 onClick={() => onSave(conformidade)}
                 disabled={saving || !form.ecopontoId}
-                className="flex-1 min-w-[200px] py-3 bg-primary text-white rounded-lg font-medium hover:bg-primary-dark disabled:opacity-50"
+                className="flex-1 min-w-[200px] bg-green-600 hover:bg-green-700 text-white font-medium px-6 py-3 rounded-lg transition-colors disabled:opacity-50"
               >
                 {saving ? 'Salvando...' : 'Salvar vistoria'}
               </button>
@@ -390,7 +318,7 @@ export default function VistoriaEcopontoChecklist({
                 type="button"
                 onClick={handleExport}
                 disabled={!savedVistoria && !form.ecopontoId}
-                className="px-6 py-3 border border-primary text-primary rounded-lg font-medium hover:bg-primary-light disabled:opacity-50"
+                className="bg-white hover:bg-gray-50 text-gray-700 font-medium px-6 py-3 rounded-lg border border-gray-200 transition-colors disabled:opacity-50"
                 title={savedVistoria ? 'Exportar última vistoria salva' : 'Salve antes ou preencha o formulário'}
               >
                 Exportar laudo PDF

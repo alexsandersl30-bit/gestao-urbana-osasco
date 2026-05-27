@@ -1,0 +1,11 @@
+Número,Tipo,Endereço,Bairro,Data abertura,Prazo,Status,Descrição,Responsável
+156-001,Coleta irregular,Rua das Flores 123,Centro,01/05/2026,15/05/2026,Aberto,Lixo depositado na rua,João Silva
+156-002,Pothole,Avenida Brasil 456,Vila Maria,02/05/2026,16/05/2026,Em atendimento,Buraco na rua necessita reparo,Maria Santos
+156-003,Esgoto entupido,Rua do Comércio 789,Piedade,03/05/2026,17/05/2026,Agendado,Esgoto transbordando na calçada,Carlos Oliveira
+156-004,Praça vandalizada,Parque da Criança 321,Taipas,04/05/2026,18/05/2026,Aberto,Pichação nas estruturas,Ana Costa
+156-005,Iluminação pública,Rua do Porto 654,Osasco,05/05/2026,19/05/2026,Concluído,Poste de luz danificado - substituído,Pedro Mendes
+156-006,Árvore caída,Avenida Maracanã 987,Alfhaville,06/05/2026,20/05/2026,Em atendimento,Árvore bloqueando a via,Roberto Dias
+156-007,Limpeza de via,Rua das Acácias 111,Centro,07/05/2026,21/05/2026,Aberto,Acúmulo de galhos e folhas,Fernanda Rocha
+156-008,Calçada danificada,Rua do Bosque 222,Vila Rica,08/05/2026,22/05/2026,Agendado,Calçada quebrada - risco de queda,Gustavo Silva
+156-009,Bueiro entupido,Avenida Norte 333,Presidente Altino,09/05/2026,23/05/2026,Aberto,Água acumulando após chuva,Leila Martins
+156-010,Placas vencidas,Rua Sul 444,Quitaúna,10/05/2026,24/05/2026,Em atendimento,Placa de identificação desbotada,Marcelo Ferreira

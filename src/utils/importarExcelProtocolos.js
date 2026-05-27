@@ -2,15 +2,17 @@ import * as XLSX from 'xlsx'
 import { TIPOS, STATUS_STORED } from './protocolos156'
 
 const COL_MAP = {
-  numero: ['número', 'numero', 'protocolo', 'nº', 'no'],
-  tipo: ['tipo'],
-  endereco: ['endereço', 'endereco', 'endereço completo'],
-  bairro: ['bairro'],
-  dataabertura: ['data abertura', 'data de abertura', 'abertura', 'dataabertura'],
-  prazo: ['prazo', 'prazo de atendimento', 'prazo atendimento', 'vencimento'],
-  status: ['status', 'situação', 'situacao'],
-  descricao: ['descrição', 'descricao', 'obs', 'observação'],
-  responsavel: ['responsável', 'responsavel'],
+  numero: ['número', 'numero', 'protocolo', 'nº', 'no', 'n°', '№', '#', 'protocolo 156'],
+  tipo: ['tipo', 'natureza da denúncia', 'natureza', 'tipo de denúncia'],
+  endereco: ['endereço', 'endereco', 'endereço completo', 'address', 'rua', 'local'],
+  bairro: ['bairro', 'bairro/zona', 'zona', 'district'],
+  dataabertura: ['data abertura', 'data de abertura', 'abertura', 'dataabertura', 'data do protocolo', 'data', 'data de criação'],
+  prazo: ['prazo', 'prazo de atendimento', 'prazo atendimento', 'vencimento', 'data vencimento', 'data prazo'],
+  status: ['status', 'situação', 'situacao', 'estado', 'state', 'andamento'],
+  descricao: ['descrição', 'descricao', 'obs', 'observação', 'observation', 'details', 'detalhes', 'reclamação', 'reclamacao'],
+  responsavel: ['responsável', 'responsavel', 'atribuído a', 'atribuido', 'assigned', 'responsavel pela vistoria'],
+  telefone: ['telefone', 'phone', 'celular', 'tel'],
+  email: ['email', 'e-mail', 'mail'],
 }
 
 function normHeader(h) {
@@ -20,7 +22,10 @@ function normHeader(h) {
 function findColKey(header) {
   const n = normHeader(header)
   for (const [key, aliases] of Object.entries(COL_MAP)) {
-    if (aliases.some((a) => n === a || n.includes(a))) return key
+    if (aliases.some((a) => {
+      const an = normHeader(a)
+      return n === an || n.includes(an) || an.includes(n)
+    })) return key
   }
   return null
 }
@@ -57,6 +62,10 @@ export function parseExcelProtocolos(file) {
     reader.onload = (e) => {
       try {
         const wb = XLSX.read(e.target.result, { type: 'array', cellDates: true })
+        if (!wb.SheetNames.length) {
+          reject(new Error('Arquivo Excel vazio'))
+          return
+        }
         const sheet = wb.Sheets[wb.SheetNames[0]]
         const rows = XLSX.utils.sheet_to_json(sheet, { header: 1, defval: '' })
         if (rows.length < 2) {
@@ -69,18 +78,27 @@ export function parseExcelProtocolos(file) {
           const key = findColKey(h)
           if (key) colIndex[key] = i
         })
+        
         if (colIndex.numero === undefined) {
-          reject(new Error('Coluna "Número" não encontrada na planilha.'))
+          reject(new Error(`Coluna "Número" não encontrada. Colunas encontradas: ${headerRow.join(', ')}`))
           return
         }
+        
         const items = []
         for (let r = 1; r < rows.length; r++) {
           const row = rows[r]
-          if (!row?.length) continue
-          const get = (key) => row[colIndex[key]] ?? ''
+          if (!row?.length || row.every((v) => !v)) continue
+          
+          const get = (key) => {
+            const idx = colIndex[key]
+            return idx !== undefined ? row[idx] : ''
+          }
+          
           const numero = String(get('numero')).trim()
           if (!numero) continue
+          
           const status = normalizeStatus(get('status'))
+          
           items.push({
             numero,
             tipo: normalizeTipo(get('tipo')),
@@ -91,6 +109,8 @@ export function parseExcelProtocolos(file) {
             status,
             descricao: String(get('descricao')).trim(),
             responsavel: String(get('responsavel')).trim() || 'Importação',
+            telefone: String(get('telefone')).trim() || '',
+            email: String(get('email')).trim() || '',
             dataConclusao: status === 'Concluído' ? new Date().toISOString() : null,
             fotos: [],
             historicoStatus: [{

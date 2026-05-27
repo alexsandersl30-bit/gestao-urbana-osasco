@@ -64,18 +64,18 @@ export function isVencidoExibicao(protocolo) {
 
 export function statusBadgeClass(status) {
   switch (status) {
-    case 'Concluído': return 'bg-green-100 text-green-800 border-green-200'
-    case 'Vencido': return 'bg-red-100 text-red-800 border-red-200'
-    case 'Em atendimento': return 'bg-blue-100 text-blue-800 border-blue-200'
-    case 'Agendado': return 'bg-purple-100 text-purple-800 border-purple-200'
+    case 'Concluído': return 'bg-[#DCFCE7] text-[#15803D] border-[#bbf7d0]'
+    case 'Vencido': return 'bg-[#FEE2E2] text-[#991B1B] border-[#fecaca]'
+    case 'Em atendimento': return 'bg-[#DBEAFE] text-[#1E40AF] border-[#bfdbfe]'
+    case 'Agendado': return 'bg-[#DBEAFE] text-[#1E40AF] border-[#bfdbfe]'
     default: return 'bg-gray-100 text-gray-700 border-gray-200'
   }
 }
 
 export function rowHighlightClass(protocolo) {
   const st = calcStatusExibicao(protocolo)
-  if (st === 'Vencido') return 'bg-red-50'
-  if (venceHojeOuAmanha(protocolo)) return 'bg-yellow-50'
+  if (st === 'Vencido') return 'bg-[#FEF2F2]'
+  if (venceHojeOuAmanha(protocolo)) return 'bg-[#FEF9C3]'
   return ''
 }
 
@@ -135,7 +135,6 @@ export function statsDashboard(protocolos) {
   const now = new Date()
   for (let i = 5; i >= 0; i--) {
     const d = new Date(now.getFullYear(), now.getMonth() - i, 1)
-    const key = `${d.getFullYear()}-${d.getMonth()}`
     const label = d.toLocaleDateString('pt-BR', { month: 'short', year: '2-digit' })
     const total = protocolos.filter((p) => {
       const da = parseDateOnly(p.dataAbertura)

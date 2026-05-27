@@ -88,11 +88,11 @@ export default function ProtocoloForm({ initial, onSave, onCancel, disabled }) {
         <PhotoUpload fotos={form.fotos} onChange={(fotos) => setForm({ ...form, fotos })} disabled={disabled} maxPhotos={3} />
       </div>
       {!disabled && (
-        <div className="flex flex-wrap gap-3 pt-2">
-          <button type="submit" disabled={saving} className="px-6 py-2.5 bg-primary text-white rounded-lg font-medium disabled:opacity-60">
+        <div className="flex gap-3 pt-4 border-t border-gray-100">
+          <button type="submit" disabled={saving} className="bg-green-600 hover:bg-green-700 text-white font-medium px-6 py-2.5 rounded-lg text-sm transition-colors disabled:opacity-60">
             {saving ? 'Salvando...' : initial?.id ? 'Atualizar' : 'Cadastrar protocolo'}
           </button>
-          {onCancel && <button type="button" onClick={onCancel} className="px-6 py-2.5 border rounded-lg text-gray-600">Cancelar</button>}
+          {onCancel && <button type="button" onClick={onCancel} className="bg-white hover:bg-gray-50 text-gray-700 font-medium px-6 py-2.5 rounded-lg text-sm border border-gray-200 transition-colors">Cancelar</button>}
         </div>
       )}
     </form>

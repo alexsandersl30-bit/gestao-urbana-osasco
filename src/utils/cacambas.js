@@ -13,9 +13,9 @@ const FREQ_DAYS = {
 }
 
 export const STATUS_BADGE = {
-  'Em dia': 'bg-green-100 text-green-800 border-green-200',
-  Atenção: 'bg-yellow-100 text-yellow-800 border-yellow-200',
-  Atrasada: 'bg-red-100 text-red-800 border-red-200',
+  'Em dia': 'bg-[#DCFCE7] text-[#15803D] border-[#bbf7d0]',
+  Atenção: 'bg-[#FEF9C3] text-[#854D0E] border-[#fef3c7]',
+  Atrasada: 'bg-[#FEE2E2] text-[#991B1B] border-[#fecaca]',
 }
 
 export function calcStatusCacamba(cacamba) {

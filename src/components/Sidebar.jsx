@@ -26,39 +26,58 @@ export default function Sidebar({ open, onClose }) {
   const varricaoAlert = hasVarricaoAlert(varricao)
   const planoCounts = countPlanosSidebar(varricao)
 
+  const accountName = user?.displayName || user?.email || 'Gestão Urbana'
+  const initials = accountName
+    .replace(/@.*$/, '')
+    .split(' ')
+    .filter(Boolean)
+    .map((part) => part[0])
+    .join('')
+    .slice(0, 2)
+    .toUpperCase()
+
   const navClass = ({ isActive }) =>
-    `flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition relative ${
-      isActive ? 'bg-primary text-white' : 'text-gray-600 hover:bg-primary-light hover:text-primary'
+    `flex items-center gap-3 px-4 py-3 rounded-r-full text-sm font-medium transition relative ${
+      isActive
+        ? 'bg-[#F0FDF4] text-[#15803d] border-l-4 border-[#16a34a] shadow-sm'
+        : 'text-[#374151] hover:bg-[#F9FAFB]'
     }`
 
   return (
     <>
       {open && <div className="fixed inset-0 bg-black/40 z-40 lg:hidden" onClick={onClose} />}
       <aside
-        className={`fixed lg:static inset-y-0 left-0 z-50 w-64 bg-white border-r border-gray-200 flex flex-col transform transition-transform lg:translate-x-0 ${
-          open ? 'translate-x-0' : '-translate-x-full'
+        className={`fixed lg:static inset-y-0 left-0 z-50 w-64 bg-white border-r border-[#E5E7EB] flex flex-col transform transition-transform lg:translate-x-0 shadow-lg ${
+          open ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
         }`}
       >
-        <div className="p-5 border-b">
-          <h1 className="text-lg font-bold text-primary">Gestão Urbana</h1>
-          <p className="text-xs text-gray-500">Prefeitura de Osasco</p>
+        <div className="p-5 border-b border-[#E5E7EB] bg-white">
+          <div className="flex items-center gap-3">
+            <div className="w-11 h-11 rounded-2xl bg-[#DCFCE7] text-[#15803d] flex items-center justify-center text-xl">
+              🌿
+            </div>
+            <div>
+              <h1 className="text-lg font-bold text-[#111827]">Gestão Urbana</h1>
+              <p className="text-xs text-[#6B7280]">Prefeitura de Osasco</p>
+            </div>
+          </div>
         </div>
 
         <nav className="flex-1 p-3 space-y-1 overflow-y-auto">
           {links.map((l) => (
             <NavLink key={l.to} to={l.to} className={navClass} onClick={onClose}>
-              <span>{l.icon}</span>
+              <span className="text-lg">{l.icon}</span>
               <span className="flex-1">{l.label}</span>
               {l.alertKey === 'pontos' && pontosAlert && (
                 <span
-                  className="w-2.5 h-2.5 rounded-full bg-red-500 shrink-0 ring-2 ring-white"
+                  className="w-2.5 h-2.5 rounded-full bg-[#DC2626] shrink-0 ring-2 ring-white"
                   title="Pontos críticos ou sem atendimento"
                   aria-hidden
                 />
               )}
               {l.alertKey === 'cacambas' && cacambasAlert && (
                 <span
-                  className="w-2.5 h-2.5 rounded-full bg-yellow-400 shrink-0 ring-2 ring-white"
+                  className="w-2.5 h-2.5 rounded-full bg-[#f59e0b] shrink-0 ring-2 ring-white"
                   title="Caçambas com coleta atrasada ou em atenção"
                   aria-hidden
                 />
@@ -92,13 +111,20 @@ export default function Sidebar({ open, onClose }) {
           )}
         </nav>
 
-        <div className="p-4 border-t">
-          <p className="text-xs text-gray-500 truncate">{user?.email}</p>
-          <p className="text-xs font-medium text-primary mb-3">{perfil}</p>
+        <div className="p-4 border-t border-[#E5E7EB] bg-white">
+          <div className="flex items-center gap-3 mb-3">
+            <div className="w-11 h-11 rounded-full bg-[#DCFCE7] text-[#15803d] font-semibold flex items-center justify-center text-base">
+              {initials}
+            </div>
+            <div className="min-w-0">
+              <p className="text-sm font-semibold text-[#111827] truncate">{user?.displayName || user?.email}</p>
+              <p className="text-xs text-[#6B7280] truncate">{perfil}</p>
+            </div>
+          </div>
           <button
             type="button"
             onClick={logout}
-            className="w-full py-2 text-sm text-red-600 border border-red-200 rounded-lg hover:bg-red-50 transition"
+            className="w-full py-2 text-sm text-[#991B1B] bg-[#FEE2E2] border border-[#FECACA] rounded-lg hover:bg-[#FECACA] transition"
           >
             Sair
           </button>

@@ -4,7 +4,6 @@ import { useAuth } from '../hooks/useAuth'
 import { COLLECTIONS, create, update, remove, createBatch } from '../firebase/db'
 import {
   canManageProtocolos,
-  canDeleteProtocolos,
   canImportProtocolosExcel,
 } from '../utils/roles'
 import { calcStatusExibicao } from '../utils/protocolos156'
@@ -152,7 +151,7 @@ export default function Protocolos156() {
   if (showForm) {
     return (
       <div className="space-y-4">
-        <button type="button" onClick={() => { setShowForm(false); setEditItem(null) }} className="text-sm text-primary hover:underline">← Voltar</button>
+        <button type="button" onClick={() => { setShowForm(false); setEditItem(null) }} className="text-sm text-green-600 hover:underline">← Voltar</button>
         {successMsg && <div className="bg-green-50 border border-green-200 text-green-800 px-4 py-3 rounded-lg text-sm">{successMsg}</div>}
         <div className="bg-white rounded-xl border p-6 shadow-sm">
           <h2 className="text-lg font-semibold mb-4">{editItem ? 'Editar protocolo' : 'Novo protocolo'}</h2>
@@ -185,8 +184,8 @@ export default function Protocolos156() {
               key={t.id}
               type="button"
               onClick={() => setTab(t.id)}
-              className={`px-4 py-2.5 text-sm font-medium border-b-2 -mb-px ${
-                tab === t.id ? 'border-primary text-primary' : 'border-transparent text-gray-500'
+              className={`px-4 py-2 text-sm font-medium border-b-2 ${
+                tab === t.id ? 'border-green-600 text-green-600' : 'border-transparent text-gray-500 hover:text-gray-700'
               }`}
             >
               {t.label}

@@ -54,7 +54,7 @@ export default function VarricaoLista({
           </select>
         </div>
         {canCreate && (
-          <button type="button" onClick={onNovo} className="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark text-sm font-medium whitespace-nowrap">
+          <button type="button" onClick={onNovo} className="bg-green-600 hover:bg-green-700 text-white font-medium px-4 py-2 rounded-lg text-sm transition-colors whitespace-nowrap">
             + Nova rua
           </button>
         )}
@@ -96,7 +96,7 @@ export default function VarricaoLista({
                     <td className="p-3">{formatDate(item.ultimaVarricao)}</td>
                     <td className="p-3"><BadgeStatus status={status} /></td>
                     <td className="p-3">
-                      <button type="button" onClick={() => onDetalhes(item.id)} className="text-primary text-sm font-medium hover:underline">
+                      <button type="button" onClick={() => onDetalhes(item.id)} className="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded-lg text-xs transition-colors">
                         Ver detalhes
                       </button>
                     </td>

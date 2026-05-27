@@ -25,52 +25,54 @@ export default function Login() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary/10 to-primary/5 p-4">
-      <div className="bg-white rounded-2xl shadow-xl w-full max-w-md p-8">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-100 via-slate-50 to-white p-4">
+      <div className="bg-white rounded-[24px] shadow-[0_24px_60px_-20px_rgba(15,23,42,0.35)] w-full max-w-md p-8 border border-[#E5E7EB]">
         <div className="text-center mb-8">
-          <div className="w-16 h-16 bg-primary rounded-2xl flex items-center justify-center mx-auto mb-4">
-            <span className="text-3xl text-white">🏙️</span>
+          <div className="w-16 h-16 bg-[#DCFCE7] rounded-3xl flex items-center justify-center mx-auto mb-4">
+            <span className="text-3xl text-[#15803d]">🏙️</span>
           </div>
-          <h1 className="text-2xl font-bold text-gray-800">Gestão Urbana</h1>
-          <p className="text-gray-500 text-sm mt-1">Prefeitura de Osasco</p>
+          <h1 className="text-3xl font-bold text-[#111827]">Gestão Urbana</h1>
+          <p className="text-[#6B7280] text-sm mt-1">Prefeitura de Osasco</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           {error && (
-            <div className="bg-red-50 text-red-700 text-sm p-3 rounded-lg border border-red-200">{error}</div>
+            <div className="bg-[#FEE2E2] text-[#991B1B] text-sm p-3 rounded-2xl border border-[#FECACA]">
+              {error}
+            </div>
           )}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">E-mail</label>
+            <label className="block text-sm font-medium text-[#111827] mb-1">E-mail</label>
             <input
               type="email"
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none"
+              className="w-full px-4 py-3 border border-[#E5E7EB] rounded-2xl focus:ring-2 focus:ring-[#16a34a]/40 focus:border-[#16a34a] outline-none transition"
               placeholder="seu@email.gov.br"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Senha</label>
+            <label className="block text-sm font-medium text-[#111827] mb-1">Senha</label>
             <input
               type="password"
               required
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none"
+              className="w-full px-4 py-3 border border-[#E5E7EB] rounded-2xl focus:ring-2 focus:ring-[#16a34a]/40 focus:border-[#16a34a] outline-none transition"
               placeholder="••••••••"
             />
           </div>
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3 bg-primary hover:bg-primary-dark text-white font-semibold rounded-lg transition disabled:opacity-60"
+            className="w-full py-3 bg-[#16a34a] hover:bg-[#15803d] text-white font-semibold rounded-2xl transition disabled:opacity-60"
           >
             {loading ? 'Entrando...' : 'Entrar'}
           </button>
         </form>
 
-        <p className="text-xs text-gray-400 text-center mt-6">
+        <p className="text-xs text-[#6B7280] text-center mt-6">
           Perfis: Gestor (total), Fiscal (cadastros), Operador (visualização)
         </p>
       </div>

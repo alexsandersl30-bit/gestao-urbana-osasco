@@ -174,9 +174,9 @@ export default function PontosViciados() {
                 setTab(t.id)
                 if (t.id === 'novo' && !editItem) setEditItem(null)
               }}
-              className={`px-4 py-2.5 text-sm font-medium border-b-2 -mb-px transition ${
+              className={`px-4 py-2 text-sm font-medium border-b-2 ${
                 tab === t.id
-                  ? 'border-primary text-primary'
+                  ? 'border-green-600 text-green-600'
                   : 'border-transparent text-gray-500 hover:text-gray-700'
               }`}
             >

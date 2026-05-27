@@ -25,7 +25,7 @@ export default function CacambaDetalhes({
 
   return (
     <div className="space-y-6">
-      <button type="button" onClick={onBack} className="text-sm text-primary hover:underline">
+      <button type="button" onClick={onBack} className="text-sm text-green-600 hover:underline">
         ← Voltar para lista
       </button>
 
@@ -72,7 +72,7 @@ export default function CacambaDetalhes({
             <ul className="space-y-2 text-sm">
               {historico.map((h, i) => (
                 <li key={i} className="flex items-center gap-3 text-gray-600 border-b border-gray-50 pb-2">
-                  <span className="w-2 h-2 rounded-full bg-primary shrink-0" />
+                  <span className="w-2 h-2 rounded-full bg-green-600 shrink-0" />
                   <span className="font-medium">{formatDate(h.data || h)}</span>
                   {h.responsavel && <span className="text-gray-400">— {h.responsavel}</span>}
                 </li>
@@ -87,14 +87,14 @@ export default function CacambaDetalhes({
               type="button"
               disabled={loadingAction || cacamba.ativa === false}
               onClick={onColeta}
-              className="px-4 py-2 bg-primary text-white rounded-lg text-sm font-medium hover:bg-primary-dark disabled:opacity-50"
+              className="bg-green-600 hover:bg-green-700 text-white font-medium px-4 py-2 rounded-lg text-sm transition-colors disabled:opacity-50"
             >
               Registrar coleta
             </button>
             <button
               type="button"
               onClick={onEdit}
-              className="px-4 py-2 border rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50"
+              className="bg-white hover:bg-gray-50 text-gray-700 font-medium px-4 py-2 rounded-lg text-sm border border-gray-200 transition-colors"
             >
               Editar
             </button>
@@ -102,14 +102,14 @@ export default function CacambaDetalhes({
               confirmDesativar ? (
                 <div className="flex items-center gap-2">
                   <span className="text-sm text-amber-700">Desativar esta caçamba?</span>
-                  <button type="button" onClick={onDesativar} className="px-3 py-1.5 bg-amber-500 text-white rounded text-sm">Sim</button>
-                  <button type="button" onClick={() => setConfirmDesativar(false)} className="px-3 py-1.5 border rounded text-sm">Não</button>
+                  <button type="button" onClick={onDesativar} className="bg-amber-50 hover:bg-amber-100 text-amber-700 font-medium px-3 py-1.5 rounded-lg text-sm border border-amber-200 transition-colors">Sim</button>
+                  <button type="button" onClick={() => setConfirmDesativar(false)} className="bg-white hover:bg-gray-50 text-gray-700 font-medium px-3 py-1.5 rounded-lg text-sm border border-gray-200 transition-colors">Não</button>
                 </div>
               ) : (
                 <button
                   type="button"
                   onClick={() => setConfirmDesativar(true)}
-                  className="px-4 py-2 border border-amber-300 text-amber-700 rounded-lg text-sm font-medium hover:bg-amber-50"
+                  className="bg-amber-50 hover:bg-amber-100 text-amber-700 font-medium px-4 py-2 rounded-lg text-sm border border-amber-200 transition-colors"
                 >
                   Desativar
                 </button>
@@ -119,14 +119,14 @@ export default function CacambaDetalhes({
               confirmDelete ? (
                 <div className="flex items-center gap-2">
                   <span className="text-sm text-red-600">Confirmar exclusão?</span>
-                  <button type="button" onClick={onExcluir} className="px-3 py-1.5 bg-red-600 text-white rounded text-sm">Sim, excluir</button>
-                  <button type="button" onClick={() => setConfirmDelete(false)} className="px-3 py-1.5 border rounded text-sm">Não</button>
+                  <button type="button" onClick={onExcluir} className="bg-red-50 hover:bg-red-100 text-red-700 font-medium px-3 py-1.5 rounded-lg text-sm border border-red-200 transition-colors">Sim, excluir</button>
+                  <button type="button" onClick={() => setConfirmDelete(false)} className="bg-white hover:bg-gray-50 text-gray-700 font-medium px-3 py-1.5 rounded-lg text-sm border border-gray-200 transition-colors">Não</button>
                 </div>
               ) : (
                 <button
                   type="button"
                   onClick={() => setConfirmDelete(true)}
-                  className="px-4 py-2 text-red-600 border border-red-200 rounded-lg text-sm font-medium hover:bg-red-50"
+                  className="bg-red-50 hover:bg-red-100 text-red-700 font-medium px-4 py-2 rounded-lg text-sm border border-red-200 transition-colors"
                 >
                   Excluir
                 </button>

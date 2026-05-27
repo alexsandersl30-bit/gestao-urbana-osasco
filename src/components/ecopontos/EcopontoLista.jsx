@@ -33,7 +33,7 @@ export default function EcopontoLista({
           </select>
         </div>
         {canCreate && (
-          <button type="button" onClick={onNovo} className="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark text-sm font-medium">
+          <button type="button" onClick={onNovo} className="bg-green-600 hover:bg-green-700 text-white font-medium px-4 py-2 rounded-lg text-sm transition-colors">
             + Novo ecoponto
           </button>
         )}
@@ -69,7 +69,7 @@ export default function EcopontoLista({
                     <td className="p-3">{ult ? formatDate(ult.dataVisita) : '—'}</td>
                     <td className="p-3"><BadgeConformidade value={ult?.conformidade} /></td>
                     <td className="p-3">
-                      <button type="button" onClick={() => onDetalhes(eco.id)} className="text-primary text-sm font-medium hover:underline">
+                      <button type="button" onClick={() => onDetalhes(eco.id)} className="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded-lg text-xs transition-colors">
                         Ver detalhes
                       </button>
                     </td>

@@ -6,14 +6,14 @@ export const STATUS_PONTO = ['Ativo', 'Resolvido']
 export const DIAS_SEMANA = ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom']
 
 export const CRITICIDADE_BADGE = {
-  Regular: 'bg-green-100 text-green-800 border-green-200',
-  Atenção: 'bg-yellow-100 text-yellow-800 border-yellow-200',
-  Crítico: 'bg-red-100 text-red-800 border-red-200',
+  Regular: 'bg-[#DCFCE7] text-[#15803D] border-[#bbf7d0]',
+  Atenção: 'bg-[#FEF9C3] text-[#854D0E] border-[#fef3c7]',
+  Crítico: 'bg-[#FEE2E2] text-[#991B1B] border-[#fecaca]',
 }
 
 export const STATUS_BADGE = {
-  Ativo: 'bg-blue-100 text-blue-800',
-  Resolvido: 'bg-gray-100 text-gray-600',
+  Ativo: 'bg-[#DBEAFE] text-[#1E40AF] border-[#bfdbfe]',
+  Resolvido: 'bg-[#DCFCE7] text-[#15803D] border-[#bbf7d0]',
 }
 
 export function diasSemanaToString(dias) {

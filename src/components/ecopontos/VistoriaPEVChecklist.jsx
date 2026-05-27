@@ -2,91 +2,19 @@ import { useMemo } from 'react'
 import PhotoUpload from '../PhotoUpload'
 import { ItemCheck } from '../ChecklistField'
 import { exportarLaudoPDF } from '../../utils/pdfLaudo'
+import {
+  PEV_OPERACAO_LABELS,
+  PEV_INFRAESTRUTURA_LABELS,
+  PEV_ABERTURAS_INTERNAS_LABELS,
+  PEV_ABERTURA_EXTERNA_LABELS,
+  PEV_CONDICAO_BAGS_LABELS,
+  PEV_TIPOS_RESIDUOS_LABELS,
+  PEV_RETIRADA_BAGS_LABELS,
+  PEV_IRREGULARIDADES_LABELS,
+  PEV_FUNCIONAMENTO_LABELS,
+} from './checklistLabels'
 
-// Labels específicos para PEV
-export const PEV_OPERACAO_LABELS = {
-  dataColeta: 'Data da coleta',
-  frequencia: 'Frequência',
-  coletaConforme: 'Coleta ocorreu conforme previsto',
-}
-
-export const PEV_INFRAESTRUTURA_LABELS = {
-  estruturaIntegra: 'Estrutura íntegra (paredes/telhado)',
-  limpezaGeral: 'Limpeza geral do PEV',
-  presenciaVandalismo: 'Presença de vandalismo',
-  portasPrincipais: 'Portas (Regular / Precária / Iluminada / Adequada / Irregular / Precária)',
-}
-
-export const PEV_ABERTURAS_INTERNAS_LABELS = {
-  quantidadeJanelas: 'Quantidade de janelas funcionando',
-  suportesMetalicos: 'Suportes metálicos íntegros',
-  aberturaAcessivel: 'Abertura acessível',
-}
-
-export const PEV_ABERTURA_EXTERNA_LABELS = {
-  funcionamentoAdequado: 'Funcionamento adequado',
-  presenciaResiduos: 'Presença de resíduos fora da abertura',
-}
-
-export const PEV_CONDICAO_BAGS_LABELS = {
-  quantidadeBags: 'Quantidade de bags instalados',
-  nivelOcupacao: 'Nível de ocupação (Baixo / Médio / Alto / Transbordando)',
-  bagsDanificados: 'Bags danificados ou com ruptura',
-}
-
-export const PEV_TIPOS_RESIDUOS_LABELS = {
-  predominante: 'Resíduo predominante',
-  residuosNaoReciclaveis: 'Presença de resíduos não recicláveis',
-}
-
-export const PEV_RETIRADA_BAGS_LABELS = {
-  portaAcessoInterna: 'Porta de acesso (interna) íntegra',
-  acessoRestrito: 'Acesso restrito mantido',
-  retiradaRegular: 'Retirada ocorre regularmente',
-}
-
-export const PEV_IRREGULARIDADES_LABELS = {
-  descarteIrregular: 'Descarte irregular no entorno',
-  mauCheiro: 'Mau cheiro',
-  presencaVetores: 'Presença de vetores',
-}
-
-export const PEV_FUNCIONAMENTO_LABELS = {
-  equipamentoObjetivo: 'Equipamento atende ao objetivo',
-  ajusteOperacional: 'Necessidade de ajuste operacional',
-}
-
-function initSection(labels) {
-  return Object.keys(labels).reduce((acc, k) => {
-    acc[k] = { condicao: '', obs: '' }
-    return acc
-  }, {})
-}
-
-export function createEmptyVistoriaPEV(fiscal = '', ecopontoId = '') {
-  return {
-    ecopontoId,
-    ecopontoNome: '',
-    tipo: 'pev',
-    fiscal,
-    dataVisita: new Date().toISOString().slice(0, 10),
-    horario: '',
-    contato: '',
-    obs: '',
-    operacao: initSection(PEV_OPERACAO_LABELS),
-    infraestrutura: initSection(PEV_INFRAESTRUTURA_LABELS),
-    aperturaInterna: initSection(PEV_ABERTURAS_INTERNAS_LABELS),
-    aperturaExterna: initSection(PEV_ABERTURA_EXTERNA_LABELS),
-    condicaoBags: initSection(PEV_CONDICAO_BAGS_LABELS),
-    tiposResiduos: initSection(PEV_TIPOS_RESIDUOS_LABELS),
-    retiradaBags: initSection(PEV_RETIRADA_BAGS_LABELS),
-    irregularidades: initSection(PEV_IRREGULARIDADES_LABELS),
-    funcionamento: initSection(PEV_FUNCIONAMENTO_LABELS),
-    classificacaoFinal: '',
-    fotos: [],
-    conformidade: 0,
-  }
-}
+// labels and factories moved to ./checklistLabels
 
 export default function VistoriaPEVChecklist({
   form,
@@ -142,7 +70,7 @@ export default function VistoriaPEVChecklist({
 
   return (
     <div className="bg-white rounded-xl border shadow-sm overflow-hidden">
-      <div className="bg-primary/10 border-b px-6 py-4">
+      <div className="bg-green-100 border-b px-6 py-4">
         <h2 className="text-lg font-bold text-gray-800">Checklist de Vistoria - PEV</h2>
         <p className="text-sm text-gray-500">Prefeitura de Osasco — Pontos de Entrega Voluntária</p>
       </div>
@@ -388,9 +316,9 @@ export default function VistoriaPEVChecklist({
             <PhotoUpload fotos={form.fotos} onChange={(fotos) => setForm({ ...form, fotos })} disabled={disabled} maxPhotos={5} />
           </div>
 
-          <div className="rounded-xl bg-primary-light/40 border border-primary/20 p-4 text-center">
+          <div className="rounded-xl bg-green-100 border border-green-200 p-4 text-center">
             <p className="text-sm text-gray-600">Percentual de conformidade</p>
-            <p className="text-4xl font-bold text-primary mt-1">{conformidade}%</p>
+            <p className="text-4xl font-bold text-green-600 mt-1">{conformidade}%</p>
             <p className="text-xs text-gray-500 mt-1">Baseado em itens &quot;Bom&quot; e &quot;Sim&quot;</p>
           </div>
 
@@ -400,7 +328,7 @@ export default function VistoriaPEVChecklist({
                 type="button"
                 onClick={() => onSave(conformidade)}
                 disabled={saving || !form.ecopontoId}
-                className="flex-1 min-w-[200px] py-3 bg-primary text-white rounded-lg font-medium hover:bg-primary-dark disabled:opacity-50"
+                className="flex-1 min-w-[200px] bg-green-600 hover:bg-green-700 text-white font-medium px-6 py-3 rounded-lg transition-colors disabled:opacity-50"
               >
                 {saving ? 'Salvando...' : 'Salvar vistoria'}
               </button>
@@ -408,7 +336,7 @@ export default function VistoriaPEVChecklist({
                 type="button"
                 onClick={handleExport}
                 disabled={!savedVistoria && !form.ecopontoId}
-                className="px-6 py-3 border border-primary text-primary rounded-lg font-medium hover:bg-primary-light disabled:opacity-50"
+                className="bg-white hover:bg-gray-50 text-gray-700 font-medium px-6 py-3 rounded-lg border border-gray-200 transition-colors disabled:opacity-50"
                 title={savedVistoria ? 'Exportar última vistoria salva' : 'Salve antes ou preencha o formulário'}
               >
                 Exportar laudo PDF

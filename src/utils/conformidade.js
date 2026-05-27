@@ -31,9 +31,9 @@ export function calcularConformidade(vistoria) {
 }
 
 export function badgeConformidadeClass(pct) {
-  if (pct >= 80) return 'bg-green-100 text-green-800 border-green-200'
-  if (pct >= 60) return 'bg-yellow-100 text-yellow-800 border-yellow-200'
-  return 'bg-red-100 text-red-800 border-red-200'
+  if (pct >= 80) return 'bg-[#DCFCE7] text-[#15803D] border-[#bbf7d0]'
+  if (pct >= 60) return 'bg-[#FEF9C3] text-[#854D0E] border-[#fef3c7]'
+  return 'bg-[#FEE2E2] text-[#991B1B] border-[#fecaca]'
 }
 
 export { ESTRUTURA_KEYS, RESIDUOS_KEYS, COMUNICACAO_KEYS }

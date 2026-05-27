@@ -54,12 +54,12 @@ export default function Dashboard() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold text-gray-800">Dashboard</h1>
-        <p className="text-gray-500 text-sm">Visão geral da gestão urbana</p>
+      <div className="bg-white rounded-2xl border border-[#E5E7EB] p-6 shadow-sm">
+        <h1 className="text-4xl font-bold text-[#111827]">Dashboard</h1>
+        <p className="text-[#6B7280] text-base mt-2">Visão geral da gestão urbana de Osasco</p>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
         <StatCard title="Pontos Viciados" value={pontos.length} />
         <StatCard title="Caçambas Atrasadas" value={metrics.cacambasAtrasadas} alert={metrics.cacambasAtrasadas > 0} />
         <StatCard title="Km Varrição (total)" value={metrics.kmMes.toFixed(1)} subtitle="Soma cadastrada" />
@@ -67,22 +67,24 @@ export default function Dashboard() {
       </div>
 
       {(metrics.criticos.length > 0 || metrics.vencidos.length > 0) && (
-        <div className="bg-red-50 border border-red-200 rounded-xl p-4">
-          <h2 className="font-semibold text-red-800 mb-2">⚠️ Alertas</h2>
-          <ul className="text-sm text-red-700 space-y-1">
+        <div className="bg-[#FEF2F2] border border-[#FECACA] rounded-2xl p-5 shadow-sm">
+          <h2 className="font-semibold text-[#991B1B] mb-2 flex items-center gap-2">
+            <span className="text-xl">⚠️</span> Alertas Importantes
+          </h2>
+          <ul className="text-sm text-[#991B1B] space-y-1">
             {metrics.criticos.map((p) => (
-              <li key={p.id}>Ponto crítico: {p.endereco} — {p.bairro}</li>
+              <li key={p.id}>• Ponto crítico: {p.endereco} — {p.bairro}</li>
             ))}
             {metrics.vencidos.map((p) => (
-              <li key={p.id}>Protocolo vencido: #{p.numero} — prazo {formatDate(p.prazo)}</li>
+              <li key={p.id}>• Protocolo vencido: #{p.numero} — prazo {formatDate(p.prazo)}</li>
             ))}
           </ul>
         </div>
       )}
 
       <div className="grid lg:grid-cols-2 gap-6">
-        <div className="bg-white rounded-xl border p-4">
-          <h3 className="font-semibold text-gray-700 mb-4">Protocolos por Tipo</h3>
+        <div className="bg-white rounded-2xl border border-[#E5E7EB] p-6 shadow-sm">
+          <h3 className="font-semibold text-[#111827] mb-4 text-lg">Protocolos por Tipo</h3>
           {metrics.chartTipo.length > 0 ? (
             <ResponsiveContainer width="100%" height={220}>
               <PieChart>
@@ -96,23 +98,23 @@ export default function Dashboard() {
               </PieChart>
             </ResponsiveContainer>
           ) : (
-            <p className="text-gray-400 text-sm text-center py-8">Nenhum protocolo cadastrado</p>
+            <p className="text-[#6B7280] text-sm text-center py-8">Nenhum protocolo cadastrado</p>
           )}
         </div>
 
         <div className="space-y-4">
           {ultimos.map((sec) => (
-            <div key={sec.label} className="bg-white rounded-xl border p-4">
-              <div className="flex justify-between items-center mb-2">
-                <h3 className="font-semibold text-gray-700 text-sm">{sec.label}</h3>
-                <Link to={sec.link} className="text-xs text-primary hover:underline">Ver todos</Link>
+            <div key={sec.label} className="bg-white rounded-2xl border border-[#E5E7EB] p-4 shadow-sm hover:shadow-md transition-shadow">
+              <div className="flex justify-between items-center mb-3">
+                <h3 className="font-semibold text-[#111827]">{sec.label}</h3>
+                <Link to={sec.link} className="text-sm text-[#16a34a] hover:underline font-medium">Ver todos →</Link>
               </div>
               {sec.items.length === 0 ? (
-                <p className="text-xs text-gray-400">Nenhum registro</p>
+                <p className="text-sm text-[#6B7280]">Nenhum registro</p>
               ) : (
-                <ul className="text-sm space-y-1">
+                <ul className="text-sm space-y-2">
                   {sec.items.map((item) => (
-                    <li key={item.id} className="text-gray-600 truncate">
+                    <li key={item.id} className="text-[#4b5563] truncate py-1 border-b border-[#E5E7EB] last:border-0">
                       {item[sec.field] || item.endereco || item.nome || '—'}
                     </li>
                   ))}

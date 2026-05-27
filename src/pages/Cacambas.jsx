@@ -3,7 +3,7 @@ import { useCollection } from '../hooks/useCollection'
 import { useAuth } from '../hooks/useAuth'
 import { COLLECTIONS, create, update, remove } from '../firebase/db'
 import { canManageCacambas } from '../utils/roles'
-import { calcStatusCacamba, isAtiva } from '../utils/cacambas'
+import { calcStatusCacamba } from '../utils/cacambas'
 import Loading from '../components/Loading'
 import CacambaLista from '../components/cacambas/CacambaLista'
 import CacambaForm from '../components/cacambas/CacambaForm'
@@ -171,9 +171,9 @@ export default function Cacambas() {
                 setTab(t.id)
                 if (t.id === 'novo' && !editItem) setEditItem(null)
               }}
-              className={`px-4 py-2.5 text-sm font-medium border-b-2 -mb-px transition ${
+              className={`px-4 py-2 text-sm font-medium border-b-2 ${
                 tab === t.id
-                  ? 'border-primary text-primary'
+                  ? 'border-green-600 text-green-600'
                   : 'border-transparent text-gray-500 hover:text-gray-700'
               }`}
             >

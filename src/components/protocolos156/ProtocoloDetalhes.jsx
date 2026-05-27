@@ -37,7 +37,7 @@ export default function ProtocoloDetalhes({
 
   return (
     <div className="space-y-6">
-      <button type="button" onClick={onBack} className="text-sm text-primary hover:underline">← Voltar</button>
+      <button type="button" onClick={onBack} className="text-sm text-green-600 hover:underline">← Voltar</button>
 
       <div className="bg-white rounded-xl border p-6 shadow-sm">
         <div className="flex flex-wrap justify-between gap-4 mb-6">
@@ -99,7 +99,7 @@ export default function ProtocoloDetalhes({
             {!isConcluido(protocolo) && (
               <>
                 {!showStatusForm ? (
-                  <button type="button" onClick={() => setShowStatusForm(true)} className="px-4 py-2 border border-primary text-primary rounded-lg text-sm font-medium">
+                  <button type="button" onClick={() => setShowStatusForm(true)} className="bg-white hover:bg-gray-50 text-gray-700 font-medium px-4 py-2 rounded-lg text-sm border border-gray-200 transition-colors">
                     Atualizar status
                   </button>
                 ) : (
@@ -109,27 +109,27 @@ export default function ProtocoloDetalhes({
                     </select>
                     <textarea value={obsStatus} onChange={(e) => setObsStatus(e.target.value)} placeholder="Observação" rows={2} className="w-full border rounded-lg px-3 py-2 text-sm" />
                     <div className="flex gap-2">
-                      <button type="button" onClick={handleStatusUpdate} disabled={loadingAction} className="px-4 py-2 bg-primary text-white rounded-lg text-sm">Salvar</button>
-                      <button type="button" onClick={() => setShowStatusForm(false)} className="px-4 py-2 border rounded-lg text-sm">Cancelar</button>
+                      <button type="button" onClick={handleStatusUpdate} disabled={loadingAction} className="bg-green-600 hover:bg-green-700 text-white font-medium px-4 py-2 rounded-lg text-sm transition-colors">Salvar</button>
+                      <button type="button" onClick={() => setShowStatusForm(false)} className="bg-white hover:bg-gray-50 text-gray-700 font-medium px-4 py-2 rounded-lg text-sm border border-gray-200 transition-colors">Cancelar</button>
                     </div>
                   </div>
                 )}
-                <button type="button" onClick={onConcluir} disabled={loadingAction} className="px-4 py-2 bg-green-600 text-white rounded-lg text-sm font-medium ml-2">
+                <button type="button" onClick={onConcluir} disabled={loadingAction} className="bg-green-600 hover:bg-green-700 text-white font-medium px-4 py-2 rounded-lg text-sm transition-colors">
                   Marcar como concluído
                 </button>
               </>
             )}
             <div className="flex flex-wrap gap-2">
-              <button type="button" onClick={onEdit} className="px-4 py-2 border rounded-lg text-sm">Editar</button>
+              <button type="button" onClick={onEdit} className="bg-white hover:bg-gray-50 text-gray-700 font-medium px-4 py-2 rounded-lg text-sm border border-gray-200 transition-colors">Editar</button>
               {canDelete && (
                 confirmDelete ? (
                   <div className="flex items-center gap-2">
                     <span className="text-sm text-red-600">Confirmar exclusão?</span>
-                    <button type="button" onClick={onExcluir} className="px-3 py-1.5 bg-red-600 text-white rounded text-sm">Sim</button>
-                    <button type="button" onClick={() => setConfirmDelete(false)} className="px-3 py-1.5 border rounded text-sm">Não</button>
+                    <button type="button" onClick={onExcluir} className="bg-red-50 hover:bg-red-100 text-red-700 font-medium px-3 py-1.5 rounded-lg text-sm border border-red-200 transition-colors">Sim</button>
+                    <button type="button" onClick={() => setConfirmDelete(false)} className="bg-white hover:bg-gray-50 text-gray-700 font-medium px-3 py-1.5 rounded-lg text-sm border border-gray-200 transition-colors">Não</button>
                   </div>
                 ) : (
-                  <button type="button" onClick={() => setConfirmDelete(true)} className="px-4 py-2 text-red-600 border border-red-200 rounded-lg text-sm">Excluir</button>
+                  <button type="button" onClick={() => setConfirmDelete(true)} className="bg-red-50 hover:bg-red-100 text-red-700 font-medium px-4 py-2 rounded-lg text-sm border border-red-200 transition-colors">Excluir</button>
                 )
               )}
             </div>

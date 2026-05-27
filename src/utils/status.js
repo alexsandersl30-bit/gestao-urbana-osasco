@@ -28,9 +28,9 @@ export function getCacambaStatus(item) {
 }
 
 export const STATUS_LABELS = {
-  em_dia: { label: 'Em dia', class: 'bg-green-100 text-green-800' },
-  atencao: { label: 'Atenção', class: 'bg-yellow-100 text-yellow-800' },
-  atrasado: { label: 'Atrasado', class: 'bg-orange-100 text-orange-800' },
-  atrasada: { label: 'Atrasada', class: 'bg-red-100 text-red-800' },
-  critico: { label: 'Crítico', class: 'bg-red-200 text-red-900' },
+  em_dia: { label: 'Em dia', class: 'bg-[#DCFCE7] text-[#15803D] border-[#bbf7d0]' },
+  atencao: { label: 'Atenção', class: 'bg-[#FEF9C3] text-[#854D0E] border-[#fef3c7]' },
+  atrasado: { label: 'Atrasado', class: 'bg-[#FEE2E2] text-[#991B1B] border-[#fecaca]' },
+  atrasada: { label: 'Atrasada', class: 'bg-[#FEE2E2] text-[#991B1B] border-[#fecaca]' },
+  critico: { label: 'Crítico', class: 'bg-[#FEE2E2] text-[#991B1B] border-[#fecaca]' },
 }
