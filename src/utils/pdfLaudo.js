@@ -2,10 +2,54 @@ import { jsPDF } from 'jspdf'
 import { formatDate } from './dates'
 import { boolLabel } from './ecopontos'
 import {
-  ESTRUTURA_LABELS,
-  RESIDUOS_LABELS,
-  COMUNICACAO_LABELS,
-} from '../components/checklistLabels'
+  ECOPONTO_OPERACAO_LABELS,
+  ECOPONTO_INFRAESTRUTURA_LABELS,
+  ECOPONTO_SEGREGACAO_LABELS,
+  ECOPONTO_CONDICIONAMENTO_LABELS,
+  ECOPONTO_COLETA_LABELS,
+  ECOPONTO_IRREGULARIDADES_LABELS,
+  ECOPONTO_SEGURANCA_LABELS,
+  ECOPONTO_FUNCIONAMENTO_LABELS,
+  PEV_ABERTURAS_INTERNAS_LABELS,
+  PEV_ABERTURA_EXTERNA_LABELS,
+  PEV_CONDICAO_BAGS_LABELS,
+  PEV_TIPOS_RESIDUOS_LABELS,
+  PEV_RETIRADA_BAGS_LABELS,
+} from '../components/ecopontos/checklistLabels'
+
+// Mapa de nomes de campos para seus labels correspondentes
+const FIELD_LABELS = {
+  operacao: 'OPERAÇÃO',
+  infraestrutura: 'INFRAESTRUTURA',
+  segregacao: 'SEGREGAÇÃO DOS RESÍDUOS',
+  condicionamento: 'CONDICIONAMENTO',
+  coleta: 'COLETA E DESTINAÇÃO',
+  irregularidades: 'IRREGULARIDADES',
+  seguranca: 'SEGURANÇA E IMPACTO',
+  funcionamento: 'FUNCIONAMENTO / EQUIPAMENTO',
+  aperturaInterna: 'ABERTURAS INTERNAS',
+  aperturaExterna: 'ABERTURA EXTERNA',
+  condicaoBags: 'CONDIÇÃO DOS BAGS',
+  tiposResiduos: 'TIPOS DE RESÍDUOS',
+  retiradaBags: 'RETIRADA DOS BAGS',
+}
+
+// Mapa de campos para seus rótulos de itens
+const ITEM_LABELS_MAP = {
+  operacao: ECOPONTO_OPERACAO_LABELS,
+  infraestrutura: ECOPONTO_INFRAESTRUTURA_LABELS,
+  segregacao: ECOPONTO_SEGREGACAO_LABELS,
+  condicionamento: ECOPONTO_CONDICIONAMENTO_LABELS,
+  coleta: ECOPONTO_COLETA_LABELS,
+  irregularidades: ECOPONTO_IRREGULARIDADES_LABELS,
+  seguranca: ECOPONTO_SEGURANCA_LABELS,
+  funcionamento: ECOPONTO_FUNCIONAMENTO_LABELS,
+  aperturaInterna: PEV_ABERTURAS_INTERNAS_LABELS,
+  aperturaExterna: PEV_ABERTURA_EXTERNA_LABELS,
+  condicaoBags: PEV_CONDICAO_BAGS_LABELS,
+  tiposResiduos: PEV_TIPOS_RESIDUOS_LABELS,
+  retiradaBags: PEV_RETIRADA_BAGS_LABELS,
+}
 
 export function exportarLaudoPDF(vistoria, ecoponto) {
   const doc = new jsPDF()
@@ -43,6 +87,7 @@ export function exportarLaudoPDF(vistoria, ecoponto) {
     y += 6
   }
 
+  // Cabeçalho
   doc.setFillColor(29, 158, 117)
   doc.rect(0, 0, pageW, 32, 'F')
   doc.setTextColor(255, 255, 255)
@@ -56,49 +101,50 @@ export function exportarLaudoPDF(vistoria, ecoponto) {
   doc.setTextColor(0, 0, 0)
   y = 40
 
+  // Informações gerais
   line(`Ecoponto: ${ecoponto?.nome || vistoria.ecopontoNome || '—'}`, 11, true)
-  line(`Tipo: ${ecoponto?.tipo || '—'} | Endereço: ${ecoponto?.endereco || '—'}, ${ecoponto?.bairro || ''}`)
+  line(`Tipo: ${ecoponto?.tipo || vistoria.tipo || '—'} | Endereço: ${ecoponto?.endereco || '—'}, ${ecoponto?.bairro || ''}`)
   line(`Fiscal / Funcionário: ${vistoria.fiscal || '—'}`)
   line(`Data da visita: ${formatDate(vistoria.dataVisita)} | Horário: ${vistoria.horario || '—'}`)
   line(`Contato: ${vistoria.contato || ecoponto?.contato || '—'}`)
-  line(`Inauguração: ${boolLabel(vistoria.inaugurado)} | EPI: ${boolLabel(vistoria.epi)}`)
+  if (vistoria.inaugurado !== undefined) line(`Inauguração: ${boolLabel(vistoria.inaugurado)} | EPI: ${boolLabel(vistoria.epi)}`)
   if (vistoria.obs) line(`OBS: ${vistoria.obs}`)
   line(`Conformidade: ${vistoria.conformidade ?? 0}%`, 11, true)
   y += 4
 
-  line('EQUIPAMENTOS', 10, true)
-  tableRow(['Item', 'Condição', 'Observações'], true)
-  tableRow([
-    'Equipamentos gerais',
-    vistoria.equipamentos?.condicao,
-    vistoria.equipamentos?.obs,
-  ])
+  // Renderizar seções dinamicamente
+  const fieldOrder = ['operacao', 'infraestrutura', 'segregacao', 'condicionamento', 'coleta', 'irregularidades', 'seguranca', 'funcionamento', 'aperturaInterna', 'aperturaExterna', 'condicaoBags', 'tiposResiduos', 'retiradaBags']
+  
+  fieldOrder.forEach((fieldName) => {
+    const section = vistoria[fieldName]
+    if (!section || typeof section !== 'object' || Array.isArray(section)) return
 
-  line('ESTRUTURA', 10, true)
-  tableRow(['Item', 'Condição', 'Observações'], true)
-  Object.entries(ESTRUTURA_LABELS).forEach(([key, label]) => {
-    const v = vistoria.estrutura?.[key]
-    tableRow([label, v?.condicao, v?.obs])
+    const sectionLabel = FIELD_LABELS[fieldName]
+    if (!sectionLabel) return
+
+    line(sectionLabel, 10, true)
+    tableRow(['Item', 'Condição', 'Observações'], true)
+
+    const itemLabels = ITEM_LABELS_MAP[fieldName] || {}
+    Object.entries(itemLabels).forEach(([key, label]) => {
+      const v = section?.[key]
+      if (!v) return
+      tableRow([label, v?.condicao || '—', v?.obs || '—'])
+    })
+
+    y += 2
   })
 
-  line('TIPOS DE RESÍDUOS', 10, true)
-  tableRow(['Item', 'Condição', 'Observações'], true)
-  Object.entries(RESIDUOS_LABELS).forEach(([key, label]) => {
-    const v = vistoria.residuos?.[key]
-    tableRow([label, v?.condicao, v?.obs])
-  })
-
-  line('COMUNICAÇÃO VISUAL', 10, true)
-  tableRow(['Item', 'Condição', 'Observações'], true)
-  Object.entries(COMUNICACAO_LABELS).forEach(([key, label]) => {
-    const v = vistoria.comunicacaoVisual?.[key]
-    tableRow([label, v?.condicao, v?.obs])
-  })
-
+  // Informações adicionais
   y += 2
-  line(`Horário de funcionamento: ${vistoria.horarioFuncionamento || '—'}`)
-  line(`Problema mais frequente: ${vistoria.problemaMaisFrequente || '—'}`)
+  if (vistoria.horarioFuncionamento) {
+    line(`Horário de funcionamento: ${vistoria.horarioFuncionamento}`)
+  }
+  if (vistoria.problemaMaisFrequente) {
+    line(`Problema mais frequente: ${vistoria.problemaMaisFrequente}`)
+  }
 
+  // Fotos
   const fotos = vistoria.fotos || []
   if (fotos.length) {
     line('Registro fotográfico', 10, true)
@@ -113,6 +159,7 @@ export function exportarLaudoPDF(vistoria, ecoponto) {
     })
   }
 
+  // Rodapé
   checkPage(15)
   y = Math.max(y, 270)
   doc.setFontSize(8)
@@ -123,6 +170,6 @@ export function exportarLaudoPDF(vistoria, ecoponto) {
     290,
   )
 
-  const nomeArq = (ecoponto?.nome || 'ecoponto').replace(/[^\w\s-]/g, '').slice(0, 30)
+  const nomeArq = (ecoponto?.nome || vistoria.ecopontoNome || 'ecoponto').replace(/[^\w\s-]/g, '').slice(0, 30)
   doc.save(`laudo-${nomeArq}-${formatDate(vistoria.dataVisita)}.pdf`)
 }
