@@ -15,14 +15,14 @@ export default function EcopontoEstatisticas({ ecopontos, vistorias }) {
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <StatCard title="Total de ecopontos" value={stats.total} />
+        <StatCard title="Total de Pontos de Entrega" value={stats.total} />
         <StatCard title="Vistorias no mês" value={stats.vistoriasMes} />
         <StatCard title="Conformidade média" value={`${stats.media}%`} />
         <StatCard title="Abaixo de 80%" value={stats.abaixo80} alert={stats.abaixo80 > 0} />
       </div>
 
       <div className="bg-white rounded-xl border p-4 shadow-sm">
-        <h3 className="font-semibold text-gray-700 mb-4">Conformidade por ecoponto (última vistoria)</h3>
+        <h3 className="font-semibold text-gray-700 mb-4">Conformidade por Pontos de Entrega (última vistoria)</h3>
         {stats.chartPorEcoponto.length > 0 ? (
           <ResponsiveContainer width="100%" height={300}>
             <BarChart data={stats.chartPorEcoponto} margin={{ bottom: 60 }}>

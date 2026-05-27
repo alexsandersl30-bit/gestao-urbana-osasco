@@ -17,7 +17,7 @@ Configure no [Console Firebase](https://console.firebase.google.com/project/gest
 2. **Firestore** — Coleções: `usuarios`, `pontos_viciados`, `cacambas`, `varricao`, `ecopontos`, `vistorias`, `protocolos_156`
 3. **Regras Firestore** (desenvolvimento):
 
-```
+```firebase
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
