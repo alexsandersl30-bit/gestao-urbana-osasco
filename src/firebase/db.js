@@ -20,6 +20,7 @@ export const COLLECTIONS = {
   VARRICAO: 'varricao',
   ECOPONTOS: 'ecopontos',
   VISTORIAS: 'vistorias',
+  VISTORIAS_CACAMBAS: 'vistorias_cacambas',
   PROTOCOLOS: 'protocolos_156',
   USUARIOS: 'usuarios',
 }

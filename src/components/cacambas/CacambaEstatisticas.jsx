@@ -1,9 +1,10 @@
 import {
-  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend,
+  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend, PieChart, Pie, Cell,
 } from 'recharts'
 import StatCard from '../StatCard'
 import { formatDate } from '../../utils/dates'
 import BadgeStatusCacamba from './BadgeStatus'
+import { statsCacambas, menorConformidade, getConformidadeBadgeClass, CRITERIOS_VISTORIA } from '../../utils/vistoriaCacambas'
 import {
   calcStatusCacamba,
   calcTaxaAtendimentoCacambas,
@@ -20,7 +21,13 @@ const STACK_COLORS = {
   Atrasada: '#ef4444',
 }
 
-export default function CacambaEstatisticas({ cacambas }) {
+const CONDITION_COLORS = {
+  Boa: '#22c55e',
+  Regular: '#eab308',
+  Ruim: '#ef4444',
+}
+
+export default function CacambaEstatisticas({ cacambas, vistorias = [] }) {
   const ativas = cacambas.filter(isAtiva)
   const coletasMes = countColetasMes(cacambas)
   const atrasadas = cacambasAtrasadasLista(cacambas).length
@@ -110,6 +117,138 @@ export default function CacambaEstatisticas({ cacambas }) {
           </tbody>
         </table>
       </div>
+
+      {vistorias.length > 0 && (
+        <>
+          <hr className="my-8" />
+          <h2 className="text-xl font-bold text-gray-800 mt-8">Vistorias de Caçambas</h2>
+          
+          <VistoriaStatistics cacambas={cacambas} vistorias={vistorias} />
+        </>
+      )}
+    </div>
+  )
+}
+
+function VistoriaStatistics({ cacambas, vistorias }) {
+  const stats = statsCacambas(cacambas, vistorias)
+  const menores = menorConformidade(vistorias, cacambas)
+  
+  // Gráfico de evolução (últimos 6 meses)
+  const chartEvolucao = stats.evolucao || []
+  
+  // Gráfico de distribuição por bairro
+  const chartBairro = stats.chartPorBairro || []
+  
+  // Gráfico de distribuição de condições (Boa/Regular/Ruim)
+  const condicoesCount = {
+    Boa: 0,
+    Regular: 0,
+    Ruim: 0,
+  }
+  vistorias.forEach((v) => {
+    CRITERIOS_VISTORIA.forEach((crit) => {
+      const val = v[crit.id]
+      if (val?.condicao === 'Boa') condicoesCount.Boa += 1
+      else if (val?.condicao === 'Regular') condicoesCount.Regular += 1
+      else if (val?.condicao === 'Ruim') condicoesCount.Ruim += 1
+    })
+  })
+  const chartCondicoes = Object.entries(condicoesCount).map(([name, value]) => ({ name, value }))
+
+  return (
+    <div className="space-y-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <StatCard title="Total de vistorias" value={stats.total} />
+        <StatCard title="Conformidade média" value={`${Math.round(stats.averageConformidade)}%`} subtitle="Geral" />
+        <StatCard title="Abaixo de 60%" value={stats.below60} alert={stats.below60 > 0} />
+        <StatCard title="Vistorias este mês" value={stats.thisMonth} subtitle="Registradas" />
+      </div>
+
+      <div className="grid lg:grid-cols-2 gap-6">
+        <div className="bg-white rounded-xl border p-4 shadow-sm">
+          <h3 className="font-semibold text-gray-700 mb-4">Conformidade média por bairro</h3>
+          {chartBairro.length > 0 ? (
+            <ResponsiveContainer width="100%" height={280}>
+              <BarChart data={chartBairro} margin={{ bottom: 60 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+                <XAxis dataKey="bairro" angle={-35} textAnchor="end" interval={0} tick={{ fontSize: 11 }} height={70} />
+                <YAxis tick={{ fontSize: 11 }} domain={[0, 100]} />
+                <Tooltip formatter={(v) => `${v}%`} />
+                <Bar dataKey="conformidade" fill="#1D9E75" name="Conformidade %" radius={[4, 4, 0, 0]} />
+              </BarChart>
+            </ResponsiveContainer>
+          ) : (
+            <p className="text-center text-gray-400 text-sm py-12">Sem dados de vistoria</p>
+          )}
+        </div>
+
+        <div className="bg-white rounded-xl border p-4 shadow-sm">
+          <h3 className="font-semibold text-gray-700 mb-4">Distribuição de condições</h3>
+          {chartCondicoes.some((c) => c.value > 0) ? (
+            <ResponsiveContainer width="100%" height={280}>
+              <PieChart>
+                <Pie data={chartCondicoes} cx="50%" cy="50%" labelLine={false} label={({ name, value }) => `${name}: ${value}`} outerRadius={80}>
+                  {chartCondicoes.map((entry) => (
+                    <Cell key={entry.name} fill={CONDITION_COLORS[entry.name] || '#999'} />
+                  ))}
+                </Pie>
+                <Tooltip />
+              </PieChart>
+            </ResponsiveContainer>
+          ) : (
+            <p className="text-center text-gray-400 text-sm py-12">Sem dados de condição</p>
+          )}
+        </div>
+      </div>
+
+      {chartEvolucao.length > 0 && (
+        <div className="bg-white rounded-xl border p-4 shadow-sm">
+          <h3 className="font-semibold text-gray-700 mb-4">Vistorias por mês (últimos 6 meses)</h3>
+          <ResponsiveContainer width="100%" height={280}>
+            <BarChart data={chartEvolucao}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+              <XAxis dataKey="mes" tick={{ fontSize: 11 }} />
+              <YAxis tick={{ fontSize: 11 }} allowDecimals={false} />
+              <Tooltip />
+              <Bar dataKey="count" fill="#1D9E75" name="Vistorias" radius={[4, 4, 0, 0]} />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+      )}
+
+      {menores.length > 0 && (
+        <div className="bg-white rounded-xl border overflow-x-auto shadow-sm">
+          <div className="p-4 border-b">
+            <h3 className="font-semibold text-amber-700">Caçambas com menor conformidade</h3>
+            <p className="text-xs text-gray-500 mt-1">Últimas {menores.length > 10 ? 10 : menores.length} vistorias com menores índices</p>
+          </div>
+          <table className="w-full text-sm">
+            <thead className="bg-amber-50 text-left">
+              <tr>
+                <th className="p-3">Endereço</th>
+                <th className="p-3">Bairro</th>
+                <th className="p-3">Última vistoria</th>
+                <th className="p-3">Conformidade</th>
+              </tr>
+            </thead>
+            <tbody>
+              {menores.slice(0, 10).map((item, idx) => (
+                <tr key={idx} className="border-t hover:bg-gray-50">
+                  <td className="p-3 font-medium">{item.endereco}</td>
+                  <td className="p-3">{item.bairro}</td>
+                  <td className="p-3 text-sm">{formatDate(item.dataVisita)}</td>
+                  <td className="p-3">
+                    <span className={`px-2 py-1 rounded text-xs font-semibold border ${getConformidadeBadgeClass(item.conformidade)}`}>
+                      {item.conformidade}%
+                    </span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   )
 }

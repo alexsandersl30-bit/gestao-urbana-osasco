@@ -4,28 +4,41 @@ import { useAuth } from '../hooks/useAuth'
 import { COLLECTIONS, create, update, remove } from '../firebase/db'
 import { canManageCacambas } from '../utils/roles'
 import { calcStatusCacamba } from '../utils/cacambas'
+import { createEmptyVistoriaCacamba } from '../utils/vistoriaCacambas'
 import Loading from '../components/Loading'
 import CacambaLista from '../components/cacambas/CacambaLista'
 import CacambaForm from '../components/cacambas/CacambaForm'
 import CacambaDetalhes from '../components/cacambas/CacambaDetalhes'
 import CacambaEstatisticas from '../components/cacambas/CacambaEstatisticas'
+import VistoriaCacambaForm from '../components/cacambas/VistoriaCacambaForm'
+import VistoriaCacambaHistorico from '../components/cacambas/VistoriaCacambaHistorico'
 
 const TABS = [
   { id: 'lista', label: 'Lista' },
   { id: 'novo', label: 'Nova caçamba' },
+  { id: 'vistoria', label: 'Vistoria' },
   { id: 'estatisticas', label: 'Estatísticas' },
+]
+
+const VISTORIA_TABS = [
+  { id: 'nova', label: 'Nova vistoria' },
+  { id: 'historico', label: 'Histórico de vistorias' },
 ]
 
 export default function Cacambas() {
   const { data, loading } = useCollection(COLLECTIONS.CACAMBAS)
+  const { data: vistorias, loading: vistoriaLoading } = useCollection(COLLECTIONS.VISTORIAS_CACAMBAS)
   const { user, perfil } = useAuth()
   const canManage = canManageCacambas(perfil)
 
   const [tab, setTab] = useState('lista')
+  const [vistoriaTab, setVistoriaTab] = useState('nova')
   const [selectedId, setSelectedId] = useState(null)
   const [editItem, setEditItem] = useState(null)
+  const [vistoriaForm, setVistoriaForm] = useState(null)
   const [successMsg, setSuccessMsg] = useState('')
   const [loadingAction, setLoadingAction] = useState(false)
+  const [savingVis, setSavingVis] = useState(false)
 
   const [filtroBairro, setFiltroBairro] = useState('')
   const [filtroStatus, setFiltroStatus] = useState('')
@@ -119,7 +132,25 @@ export default function Cacambas() {
     setLoadingAction(false)
   }
 
-  if (loading) return <Loading />
+  const handleSaveVistoria = async (formData) => {
+    setSavingVis(true)
+    try {
+      await create(COLLECTIONS.VISTORIAS_CACAMBAS, {
+        ...formData,
+        dataCadastro: new Date().toISOString(),
+        criadoPor: user?.email || 'Sistema',
+      })
+      showSuccess('Vistoria registrada com sucesso!')
+      setVistoriaForm(createEmptyVistoriaCacamba())
+      setVistoriaTab('historico')
+    } catch (error) {
+      console.error('Erro ao salvar vistoria:', error)
+      alert('Erro ao salvar vistoria.')
+    }
+    setSavingVis(false)
+  }
+
+  if (loading || vistoriaLoading) return <Loading />
 
   if (selectedId && selectedCacamba) {
     return (
@@ -217,7 +248,53 @@ export default function Cacambas() {
         </div>
       )}
 
-      {tab === 'estatisticas' && <CacambaEstatisticas cacambas={data} />}
+      {tab === 'vistoria' && (
+        <div className="space-y-6">
+          <div className="flex gap-1 border-b border-gray-200 bg-blue-50 p-4 rounded-lg">
+            {VISTORIA_TABS.map((t) => (
+              <button
+                key={t.id}
+                type="button"
+                onClick={() => setVistoriaTab(t.id)}
+                className={`px-4 py-2 text-sm font-medium border-b-2 ${
+                  vistoriaTab === t.id
+                    ? 'border-blue-600 text-blue-600'
+                    : 'border-transparent text-gray-500 hover:text-gray-700'
+                }`}
+              >
+                {t.label}
+              </button>
+            ))}
+          </div>
+
+          {vistoriaTab === 'nova' && canManage && (
+            <VistoriaCacambaForm
+              form={vistoriaForm || createEmptyVistoriaCacamba()}
+              setForm={setVistoriaForm}
+              cacambas={data}
+              disabled={savingVis}
+              onSave={handleSaveVistoria}
+              saving={savingVis}
+            />
+          )}
+
+          {vistoriaTab === 'historico' && (
+            <VistoriaCacambaHistorico
+              vistorias={vistorias}
+              cacambas={data}
+              onExcluir={() => {}}
+            />
+          )}
+
+          {!canManage && vistoriaTab === 'nova' && (
+            <div className="bg-yellow-50 border border-yellow-200 text-yellow-800 px-4 py-3 rounded-lg text-sm">
+              Você não tem permissão para registrar vistorias.
+            </div>
+          )}
+        </div>
+      )}
+
+      {tab === 'estatisticas' && <CacambaEstatisticas cacambas={data} vistorias={vistorias} />}
     </div>
   )
 }
