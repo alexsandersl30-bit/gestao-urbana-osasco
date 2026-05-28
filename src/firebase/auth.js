@@ -2,6 +2,7 @@ import {
   signInWithEmailAndPassword,
   signOut,
   createUserWithEmailAndPassword,
+  sendPasswordResetEmail,
 } from 'firebase/auth'
 import { initializeApp, deleteApp } from 'firebase/app'
 import { getAuth } from 'firebase/auth'
@@ -33,4 +34,13 @@ export async function createUserAccount({ email, password, nome, perfil }) {
   } finally {
     await deleteApp(secondaryApp)
   }
+}
+
+// Nota: Configure o Firebase Console para enviar e-mails em português:
+// Firebase Console → Authentication → Templates → Password reset → Language: Portuguese (Brazil)
+export async function resetPassword(email) {
+  await sendPasswordResetEmail(auth, email, {
+    url: window.location.origin + '/login',
+    handleCodeInApp: false,
+  })
 }
