@@ -45,23 +45,20 @@ export default function Sidebar({ open, onClose }) {
 
   return (
     <>
-      {open && <div className="fixed inset-0 bg-black/40 z-40 lg:hidden" onClick={onClose} />}
+      {open && 
+      <div className="fixed inset-0 bg-black/40 z-40 lg:hidden" onClick={onClose} />}
       <aside
         className={`fixed lg:static inset-y-0 left-0 z-50 w-64 bg-white border-r border-[#E5E7EB] flex flex-col transform transition-transform lg:translate-x-0 shadow-lg ${
           open ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
         }`}
       >
-        <div className="p-5 border-b border-[#E5E7EB] bg-white">
-          <div className="flex items-center gap-3">
-            <div className="w-11 h-11 rounded-2xl bg-[#DCFCE7] text-[#15803d] flex items-center justify-center text-xl">
-              🌿
-            </div>
-            <div>
-              <h1 className="text-lg font-bold text-[#111827]">Gestão Urbana</h1>
-              <p className="text-xs text-[#6B7280]">Prefeitura de Osasco</p>
-            </div>
-          </div>
-        </div>
+        <div className="p-4 border-b border-[#E5E7EB] bg-white">
+  <img
+    src="/logo.png"
+    alt="Osasco Urbana"
+    className="h-14 w-auto object-contain mx-auto"
+  />
+</div>
 
         <nav className="flex-1 p-3 space-y-1 overflow-y-auto">
           {links.map((l) => (

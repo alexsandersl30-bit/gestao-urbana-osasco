@@ -59,12 +59,13 @@ export default function Login() {
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-100 via-slate-50 to-white p-4">
       <div className="bg-white rounded-[24px] shadow-[0_24px_60px_-20px_rgba(15,23,42,0.35)] w-full max-w-md p-8 border border-[#E5E7EB]">
         <div className="text-center mb-8">
-          <div className="w-16 h-16 bg-[#DCFCE7] rounded-3xl flex items-center justify-center mx-auto mb-4">
-            <span className="text-3xl text-[#15803d]">🏙️</span>
-          </div>
-          <h1 className="text-3xl font-bold text-[#111827]">Gestão Urbana</h1>
-          <p className="text-[#6B7280] text-sm mt-1">Prefeitura de Osasco</p>
-        </div>
+  <img
+    src="/logo.png"
+    alt="Osasco Urbana"
+    className="h-24 w-auto object-contain mx-auto mb-2"
+  />
+  <p className="text-[#6B7280] text-xs mt-1">Diretoria de Limpeza Urbana</p>
+</div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           {error && (

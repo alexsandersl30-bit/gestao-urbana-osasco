@@ -1,4 +1,5 @@
 import { jsPDF } from 'jspdf'
+import { LOGO_BASE64 } from './logobase64'
 import { formatDate } from './dates'
 import { boolLabel } from './ecopontos'
 import {
@@ -87,19 +88,33 @@ export function exportarLaudoPDF(vistoria, ecoponto) {
     y += 6
   }
 
-  // Cabeçalho
-  doc.setFillColor(29, 158, 117)
-  doc.rect(0, 0, pageW, 32, 'F')
-  doc.setTextColor(255, 255, 255)
-  doc.setFontSize(11)
-  doc.setFont('helvetica', 'bold')
-  doc.text('Prefeitura do Município de Osasco', margin, 12)
-  doc.setFontSize(9)
-  doc.setFont('helvetica', 'normal')
-  doc.text('Secretaria de Serviços e Obras', margin, 20)
-  doc.text('Laudo de Vistoria — Ecoponto / PEV / Cooperativa', margin, 27)
-  doc.setTextColor(0, 0, 0)
-  y = 40
+// Cabeçalho
+doc.setFillColor(29, 158, 117)
+doc.rect(0, 0, pageW, 40, 'F')
+
+// Fundo branco atrás do logo
+doc.setFillColor(255, 255, 255)
+doc.roundedRect(margin - 2, 4, 44, 32, 3, 3, 'F')
+
+// Logo
+try {
+  doc.addImage(LOGO_BASE64, 'PNG', margin, 6, 40, 28)
+// eslint-disable-next-line no-unused-vars
+} catch (e) {
+  // fallback sem logo
+}
+
+// Textos do cabeçalho
+doc.setTextColor(255, 255, 255)
+doc.setFontSize(11)
+doc.setFont('helvetica', 'bold')
+doc.text('Prefeitura do Município de Osasco', 62, 14)
+doc.setFontSize(9)
+doc.setFont('helvetica', 'normal')
+doc.text('Secretaria de Serviços e Obras', 62, 22)
+doc.text('Laudo de Vistoria — Ecoponto / PEV / Cooperativa', 62, 30)
+doc.setTextColor(0, 0, 0)
+y = 48
 
   // Informações gerais
   line(`Ecoponto: ${ecoponto?.nome || vistoria.ecopontoNome || '—'}`, 11, true)
@@ -127,10 +142,14 @@ export function exportarLaudoPDF(vistoria, ecoponto) {
 
     const itemLabels = ITEM_LABELS_MAP[fieldName] || {}
     Object.entries(itemLabels).forEach(([key, label]) => {
-      const v = section?.[key]
-      if (!v) return
-      tableRow([label, v?.condicao || '—', v?.obs || '—'])
-    })
+  const v = section?.[key]
+  if (!v) return
+  const condicao = v?.condicao || ''
+  const obs = v?.obs || ''
+  // Pular itens completamente vazios
+  if (!condicao && !obs) return
+  tableRow([label, condicao || '—', obs || '—'])
+})
 
     y += 2
   })
@@ -165,7 +184,7 @@ export function exportarLaudoPDF(vistoria, ecoponto) {
   doc.setFontSize(8)
   doc.setTextColor(100, 100, 100)
   doc.text(
-    `Documento gerado em ${new Date().toLocaleString('pt-BR')} — Gestão Urbana Osasco`,
+    `Documento gerado em ${new Date().toLocaleString('pt-BR')} — Osasco Urbana - Diretoria de Limpeaza Urbana`,
     margin,
     290,
   )
