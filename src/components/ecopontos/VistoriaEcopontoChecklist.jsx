@@ -86,7 +86,7 @@ export default function VistoriaEcopontoChecklist({
                 disabled={disabled}
                 className="w-full border rounded-lg px-3 py-2 text-sm mt-1"
               >
-                <option value="">Selecione o ecoponto</option>
+                <option value="">Selecione o Ponto</option>
                 {ecopontos
                   .filter((e) => e.ativo !== false && e.tipo === 'Ecoponto')
                   .map((e) => (

@@ -83,11 +83,20 @@ export default function Ecopontos() {
   }
 
   const handleSaveVistoria = async (conformidade) => {
-    if (!visForm.ecopontoId || !visForm.fiscal?.trim()) {
-      showSuccess('Selecione o ecoponto e informe o fiscal.')
-      return
-    }
-    setSavingVis(true)
+  if (!visForm.ecopontoId || !visForm.fiscal?.trim()) {
+    showSuccess('Selecione o ecoponto e informe o fiscal.')
+    return
+  }
+
+  // Verificar tamanho total das fotos
+  const fotosSize = (visForm.fotos || []).reduce((s, f) => s + (f?.length || 0), 0)
+  if (fotosSize > 800000) {
+    showSuccess('Fotos muito grandes. Use no máximo 2-3 fotos por vistoria ou reduza o tamanho.')
+    return
+  }
+
+  setSavingVis(true)
+  try {
     const eco = ecopontos.find((e) => e.id === visForm.ecopontoId)
     const payload = {
       ...visForm,
@@ -98,8 +107,17 @@ export default function Ecopontos() {
     const id = await create(COLLECTIONS.VISTORIAS, payload)
     setLastSavedVistoria({ ...payload, id })
     showSuccess(`Vistoria salva com ${conformidade}% de conformidade!`)
+  } catch (err) {
+    console.error('Erro ao salvar vistoria:', err)
+    if (err?.message?.includes('exceeds') || err?.code === 'resource-exhausted') {
+      showSuccess('Erro: documento muito grande. Reduza o número de fotos e tente novamente.')
+    } else {
+      showSuccess('Erro ao salvar vistoria. Tente novamente.')
+    }
+  } finally {
     setSavingVis(false)
   }
+}
 
   const handleExcluirEco = async () => {
     if (!selectedEco) return
