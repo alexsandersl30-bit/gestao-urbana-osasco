@@ -2,6 +2,7 @@ import { useMemo } from 'react'
 import PhotoUpload from '../PhotoUpload'
 import { ItemCheck } from '../ChecklistField'
 import { exportarLaudoPDF } from '../../utils/pdfLaudo'
+import { toLocalDateString } from '../../utils/dates'
 import {
   PEV_OPERACAO_LABELS,
   PEV_INFRAESTRUTURA_LABELS,
@@ -102,7 +103,7 @@ export default function VistoriaPEVChecklist({
               <label className="text-sm font-medium text-gray-700">Data da visita *</label>
               <input
                 type="date"
-                value={form.dataVisita?.slice?.(0, 10) || form.dataVisita}
+                value={toLocalDateString(form.dataVisita)}
                 onChange={(e) => setForm({ ...form, dataVisita: e.target.value })}
                 disabled={disabled}
                 className="w-full border rounded-lg px-3 py-2 text-sm mt-1"

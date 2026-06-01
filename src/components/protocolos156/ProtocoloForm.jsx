@@ -1,9 +1,10 @@
 import { useState } from 'react'
 import PhotoUpload from '../PhotoUpload'
 import { TIPOS, STATUS_STORED, emptyProtocolo, validateProtocoloForm } from '../../utils/protocolos156'
+import { toFirestoreDate, toLocalDateString } from '../../utils/dates'
 
 export default function ProtocoloForm({ initial, onSave, onCancel, disabled }) {
-  const [form, setForm] = useState(initial ? { ...emptyProtocolo, ...initial } : { ...emptyProtocolo, dataAbertura: new Date().toISOString().slice(0, 10) })
+  const [form, setForm] = useState(initial ? { ...emptyProtocolo, ...initial } : { ...emptyProtocolo, dataAbertura: toLocalDateString(new Date()) })
   const [errors, setErrors] = useState({})
   const [saving, setSaving] = useState(false)
 
@@ -19,8 +20,8 @@ export default function ProtocoloForm({ initial, onSave, onCancel, disabled }) {
         tipo: form.tipo,
         endereco: form.endereco.trim(),
         bairro: form.bairro.trim(),
-        dataAbertura: new Date(form.dataAbertura).toISOString(),
-        prazo: new Date(form.prazo).toISOString(),
+        dataAbertura: toFirestoreDate(form.dataAbertura),
+        prazo: toFirestoreDate(form.prazo),
         responsavel: form.responsavel.trim(),
         status: form.status,
         descricao: form.descricao?.trim() || '',
@@ -62,10 +63,10 @@ export default function ProtocoloForm({ initial, onSave, onCancel, disabled }) {
       ))}
       <div className="grid md:grid-cols-2 gap-4">
         {field('dataAbertura', 'Data de abertura *', (
-          <input type="date" value={form.dataAbertura?.slice?.(0, 10) || form.dataAbertura} onChange={(e) => setForm({ ...form, dataAbertura: e.target.value })} disabled={disabled} className="w-full border rounded-lg px-3 py-2 text-sm" />
+          <input type="date" value={toLocalDateString(form.dataAbertura)} onChange={(e) => setForm({ ...form, dataAbertura: e.target.value })} disabled={disabled} className="w-full border rounded-lg px-3 py-2 text-sm" />
         ))}
         {field('prazo', 'Prazo de atendimento *', (
-          <input type="date" value={form.prazo?.slice?.(0, 10) || form.prazo} onChange={(e) => setForm({ ...form, prazo: e.target.value })} disabled={disabled} className="w-full border rounded-lg px-3 py-2 text-sm" />
+          <input type="date" value={toLocalDateString(form.prazo)} onChange={(e) => setForm({ ...form, prazo: e.target.value })} disabled={disabled} className="w-full border rounded-lg px-3 py-2 text-sm" />
         ))}
       </div>
       <div className="grid md:grid-cols-2 gap-4">

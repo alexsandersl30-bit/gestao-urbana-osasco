@@ -2,6 +2,7 @@ import { useState } from 'react'
 import PhotoUpload from '../PhotoUpload'
 import Modal from '../Modal'
 import { emptyRegistroVarricao, validateRegistroVarricao } from '../../utils/varricao'
+import { toFirestoreDate } from '../../utils/dates'
 
 export default function RegistroVarricaoForm({ open, onClose, onSave, rua, responsavelDefault }) {
   const [form, setForm] = useState({
@@ -20,7 +21,7 @@ export default function RegistroVarricaoForm({ open, onClose, onSave, rua, respo
     setSaving(true)
     try {
       await onSave({
-        data: new Date(form.data).toISOString(),
+        data: toFirestoreDate(form.data),
         kmExecutado: Number(form.kmExecutado),
         equipe: form.equipe.trim(),
         responsavel: form.responsavel.trim(),

@@ -86,7 +86,7 @@ export default function Cacambas() {
     } else {
       await create(COLLECTIONS.CACAMBAS, {
         ...payload,
-        dataCadastro: new Date().toISOString(),
+        dataCadastro: new Date(),
         ultimaColeta: null,
         ativa: true,
         historicoColetas: [],
@@ -99,7 +99,7 @@ export default function Cacambas() {
   const handleColeta = async () => {
     if (!selectedCacamba) return
     setLoadingAction(true)
-    const now = new Date().toISOString()
+    const now = new Date()
     const responsavel = user?.email || 'Fiscal'
     const entrada = { data: now, responsavel }
     const hist = [...(selectedCacamba.historicoColetas || []), entrada]
@@ -137,7 +137,7 @@ export default function Cacambas() {
     try {
       await create(COLLECTIONS.VISTORIAS_CACAMBAS, {
         ...formData,
-        dataCadastro: new Date().toISOString(),
+        dataCadastro: new Date(),
         criadoPor: user?.email || 'Sistema',
       })
       showSuccess('Vistoria registrada com sucesso!')

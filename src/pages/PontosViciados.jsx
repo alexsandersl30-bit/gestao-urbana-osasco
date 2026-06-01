@@ -67,7 +67,7 @@ export default function PontosViciados() {
     } else {
       await create(COLLECTIONS.PONTOS, {
         ...payload,
-        dataCadastro: new Date().toISOString(),
+        dataCadastro: new Date(),
         denuncias: 0,
         status: 'Ativo',
         historicoAtendimentos: [],
@@ -81,7 +81,7 @@ export default function PontosViciados() {
   const handleAtendimento = async () => {
     if (!selectedPonto) return
     setLoadingAction(true)
-    const now = new Date().toISOString()
+    const now = new Date()
     const hist = [...(selectedPonto.historicoAtendimentos || []), now]
     await update(COLLECTIONS.PONTOS, selectedPonto.id, {
       ultimoAtendimento: now,
@@ -94,7 +94,7 @@ export default function PontosViciados() {
   const handleDenuncia = async () => {
     if (!selectedPonto) return
     setLoadingAction(true)
-    const now = new Date().toISOString()
+    const now = new Date()
     await update(COLLECTIONS.PONTOS, selectedPonto.id, {
       denuncias: (selectedPonto.denuncias || 0) + 1,
       historicoDenuncias: [...(selectedPonto.historicoDenuncias || []), now],

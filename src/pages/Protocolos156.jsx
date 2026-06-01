@@ -65,7 +65,7 @@ export default function Protocolos156() {
 
   const appendHistorico = (protocolo, status, responsavel, observacao) => [
     ...(protocolo.historicoStatus || []),
-    { data: new Date().toISOString(), status, responsavel, observacao: observacao || '' },
+    { data: new Date(), status, responsavel, observacao: observacao || '' },
   ]
 
   const handleSave = async (payload) => {
@@ -83,7 +83,7 @@ export default function Protocolos156() {
       )
       await create(COLLECTIONS.PROTOCOLOS, {
         ...payload,
-        dataCadastro: new Date().toISOString(),
+        dataCadastro: new Date(),
         historicoStatus: hist,
       })
       showSuccess('Protocolo cadastrado com sucesso!')
@@ -104,7 +104,7 @@ export default function Protocolos156() {
   const handleConcluir = async () => {
     if (!selected) return
     setLoadingAction(true)
-    const now = new Date().toISOString()
+    const now = new Date()
     const hist = appendHistorico(selected, 'Concluído', user?.email || '', 'Marcado como concluído')
     await update(COLLECTIONS.PROTOCOLOS, selected.id, {
       status: 'Concluído',

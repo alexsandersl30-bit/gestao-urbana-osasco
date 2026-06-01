@@ -4,6 +4,7 @@ import { useAuth } from '../hooks/useAuth'
 import { COLLECTIONS, create, update, remove } from '../firebase/db'
 import { canManageEcopontos } from '../utils/roles'
 import { ultimaVistoriaPorEcoponto } from '../utils/ecopontos'
+import { toFirestoreDate } from '../utils/dates'
 import Loading from '../components/Loading'
 import EcopontoLista from '../components/ecopontos/EcopontoLista'
 import EcopontoForm from '../components/ecopontos/EcopontoForm'
@@ -73,7 +74,7 @@ export default function Ecopontos() {
     } else {
       await create(COLLECTIONS.ECOPONTOS, {
         ...payload,
-        dataCadastro: new Date().toISOString(),
+        dataCadastro: new Date(),
         ativo: true,
       })
       showSuccess('Ecoponto cadastrado com sucesso!')
@@ -100,7 +101,7 @@ export default function Ecopontos() {
     const eco = ecopontos.find((e) => e.id === visForm.ecopontoId)
     const payload = {
       ...visForm,
-      dataVisita: new Date(visForm.dataVisita).toISOString(),
+      dataVisita: toFirestoreDate(visForm.dataVisita),
       ecopontoNome: eco?.nome || visForm.ecopontoNome,
       conformidade,
     }

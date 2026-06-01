@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react'
 import PhotoUpload from '../PhotoUpload'
+import { toLocalDateString } from '../../utils/dates'
 import { calcularConformidadeCacamba, CRITERIOS_VISTORIA } from '../../utils/vistoriaCacambas'
 
 export default function VistoriaCacambaForm({
@@ -87,7 +88,7 @@ export default function VistoriaCacambaForm({
               <label className="text-sm font-medium text-gray-700">Data da visita *</label>
               <input
                 type="date"
-                value={form.dataVisita?.slice?.(0, 10) || form.dataVisita}
+                value={toLocalDateString(form.dataVisita)}
                 onChange={(e) => setForm({ ...form, dataVisita: e.target.value })}
                 disabled={disabled}
                 className="w-full border rounded-lg px-3 py-2 text-sm mt-1"

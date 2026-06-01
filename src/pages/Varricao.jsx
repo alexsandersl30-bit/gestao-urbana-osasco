@@ -114,7 +114,7 @@ export default function Varricao() {
     } else {
       await create(COLLECTIONS.VARRICAO, {
         ...payload,
-        dataCadastro: new Date().toISOString(),
+        dataCadastro: new Date(),
         ultimaVarricao: null,
         ativa: true,
       })

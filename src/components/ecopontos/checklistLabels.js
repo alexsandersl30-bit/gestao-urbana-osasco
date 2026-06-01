@@ -1,3 +1,5 @@
+import { toLocalDateString } from '../../utils/dates'
+
 function initSection(labels) {
   return Object.keys(labels).reduce((acc, k) => {
     acc[k] = { condicao: '', obs: '' }
@@ -62,7 +64,7 @@ export function createEmptyVistoriaEcoponto(fiscal = '', ecopontoId = '') {
     ecopontoNome: '',
     tipo: 'ecoponto',
     fiscal,
-    dataVisita: new Date().toISOString().slice(0, 10),
+    dataVisita: toLocalDateString(new Date()),
     horario: '',
     contato: '',
     obs: '',
@@ -139,7 +141,7 @@ export function createEmptyVistoriaPEV(fiscal = '', ecopontoId = '') {
     ecopontoNome: '',
     tipo: 'pev',
     fiscal,
-    dataVisita: new Date().toISOString().slice(0, 10),
+    dataVisita: toLocalDateString(new Date()),
     horario: '',
     contato: '',
     obs: '',
