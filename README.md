@@ -57,6 +57,16 @@ service cloud.firestore {
 - Protocolos 156
 - Fotos comprimidas (800px) em base64 no Firestore
 
+## Geocodificação / Geometrias
+
+- O projeto inclui scripts e uma Cloud Function para geocodificação e obtenção de geometria (trechos de rua) usando Nominatim + Overpass.
+- Variáveis de ambiente relevantes:
+  - `GOOGLE_APPLICATION_CREDENTIALS` — caminho para a service account JSON usada pelos scripts/Cloud Functions.
+  - `NOMINATIM_USER_AGENT` — texto enviado no header `User-Agent` para Nominatim/Overpass (recomendado incluir um e-mail de contato).
+  - `NOMINATIM_EMAIL` — alternativa legada usada como fallback.
+
+Para mais detalhes veja `scripts/README-geocode.md`.
+
 ## Build
 
 ```bash

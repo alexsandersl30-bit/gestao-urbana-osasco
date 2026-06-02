@@ -5,6 +5,7 @@ import Layout from './components/Layout'
 import Loading from './components/Loading'
 import Login from './pages/Login'
 import Dashboard from './pages/Dashboard'
+import Mapa from './pages/Mapa'
 import PontosViciados from './pages/PontosViciados'
 import Cacambas from './pages/Cacambas'
 import Varricao from './pages/Varricao'
@@ -37,6 +38,7 @@ export default function App() {
             <Route path="cacambas" element={<Cacambas />} />
             <Route path="varricao" element={<Varricao />} />
             <Route path="ecopontos" element={<Ecopontos />} />
+            <Route path="mapa" element={<Mapa />} />
             <Route path="protocolos-156" element={<Protocolos156 />} />
             <Route path="protocolos" element={<Navigate to="/protocolos-156" replace />} />
             <Route

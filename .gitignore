@@ -22,3 +22,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Firebase Admin Service Account
+*adminsdk*.json
+service-account*.json

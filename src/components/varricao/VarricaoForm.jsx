@@ -3,6 +3,7 @@ import PhotoUpload from '../PhotoUpload'
 import {
   FREQUENCIAS, PLANOS, emptyRua, normalizePlano, validateVarricaoForm, kmValue,
 } from '../../utils/varricao'
+import fetchStreetGeometry from '../../utils/osm_overpass'
 
 export default function VarricaoForm({ initial, onSave, onCancel, disabled }) {
   const base = initial
@@ -20,6 +21,15 @@ export default function VarricaoForm({ initial, onSave, onCancel, disabled }) {
     if (Object.keys(errs).length) return
     setSaving(true)
     try {
+      // Tentar obter geometria da rua (LineString GeoJSON) e enviar junto ao salvar
+      let geometry = null
+      try {
+        geometry = await fetchStreetGeometry(form.rua.trim(), form.bairro.trim())
+        if (geometry) console.log('[GEOMETRY] encontrado para rua:', form.rua)
+      } catch (errGeo) {
+        console.warn('[GEOMETRY] falha obtendo geometria:', errGeo)
+      }
+
       await onSave({
         rua: form.rua.trim(),
         bairro: form.bairro.trim(),
@@ -32,6 +42,7 @@ export default function VarricaoForm({ initial, onSave, onCancel, disabled }) {
         fotos: form.fotos || [],
         ativa: form.ativa !== false,
         ultimaVarricao: form.ultimaVarricao || null,
+        ...(geometry ? { geometry } : {}),
       })
     } finally {
       setSaving(false)

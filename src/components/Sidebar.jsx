@@ -13,6 +13,7 @@ const links = [
   { to: '/cacambas', label: 'Caçambas', icon: '🚧', alertKey: 'cacambas' },
   { to: '/varricao', label: 'Varrição', icon: '🧹', planBadges: true },
   { to: '/ecopontos', label: 'Pontos de Entrega', icon: '♻️' },
+  { to: '/mapa', label: 'Mapa Geral', icon: '🗺️' },
   { to: '/protocolos-156', label: 'Protocolos 156', icon: '📋' },
 ]
 
